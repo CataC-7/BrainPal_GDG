@@ -1,3 +1,4 @@
+
 "use client";
 
 import { dailyWorkflows as initialDailyWorkflows } from '@/lib/data';
@@ -11,6 +12,16 @@ import { arrayMove } from '@dnd-kit/sortable';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { CompletionCelebration } from './completion-celebration';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 export function RoutineAccessor() {
   const [dailyWorkflows, setDailyWorkflows] = useState<Routine[]>(initialDailyWorkflows);
@@ -161,10 +172,25 @@ export function RoutineAccessor() {
           <Card className="border bg-card rounded-md">
             <CardHeader className="px-4 pt-4 pb-2 flex-row items-center justify-between">
               <CardTitle className="text-left font-semibold text-base">My Protocols</CardTitle>
-              <Button variant="outline" size="sm">
-                <Plus className="mr-2 h-4 w-4" />
-                Create new
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create new
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Feature in Development</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This feature is still in development - once shipped, you will be able to create new protocols by giving them a bespoke title/icon and outlining the key activities and sub-tasks associated with them.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogAction>Got it!</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </CardHeader>
             <CardContent className="px-4 pb-4">
                 <div className="text-sm text-muted-foreground">
