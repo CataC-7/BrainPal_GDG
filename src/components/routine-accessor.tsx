@@ -51,35 +51,31 @@ export function RoutineAccessor() {
 
   const handleNonNegotiablesChange = (value: string) => {
     const tasks = value.split(',').map(task => task.trim()).filter(task => task);
-
+  
+    if (tasks.length > 3) {
+      toast({
+        title: "Input Error",
+        description: "Maximum of 3 non-negotiables is allowed.",
+        variant: "destructive",
+      });
+      // Trim the tasks to the first 3 if more are entered.
+      tasks.length = 3;
+    }
+  
+    const newSteps: Step[] = tasks.map(task => ({ text: `*${task}*`, completed: false }));
+  
     setDailyWorkflows(prevWorkflows => {
-      const flowWorkflow = prevWorkflows.find(w => w.id === 'dwf-flow');
-      const otherTasks = flowWorkflow ? flowWorkflow.steps.filter(s => !s.text.startsWith('*')) : [];
-      
-      const nonNegotiableTasksCount = otherTasks.length + tasks.length;
-
-      if (tasks.length > 3) {
-        toast({
-          title: "Input Error",
-          description: "Maximum of 3 non-negotiables is allowed.",
-          variant: "destructive",
-        });
-        // Trim the tasks to the first 3 if more are entered.
-        tasks.length = 3;
-      }
-  
-      const newSteps: Step[] = tasks.map(task => ({ text: `*${task}*`, completed: false }));
-  
       return prevWorkflows.map(workflow => {
         if (workflow.id === 'dwf-flow') {
-          const existingNonNegotiables = workflow.steps.filter(step => step.text.startsWith('*'));
+          // Keep existing activities that are not non-negotiables
           const existingActivities = workflow.steps.filter(step => !step.text.startsWith('*'));
           
           if (value.trim() === '') {
-            // If input is empty, remove all non-negotiables
-             return { ...workflow, steps: existingActivities };
+            // If input is empty, only keep existing activities
+            return { ...workflow, steps: existingActivities };
           }
           
+          // Add new non-negotiables to the existing activities
           return { ...workflow, steps: [...existingActivities, ...newSteps] };
         }
         return workflow;
