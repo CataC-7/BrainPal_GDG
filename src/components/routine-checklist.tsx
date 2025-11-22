@@ -101,7 +101,8 @@ export function RoutineChecklist({
     }
   }
 
-  const handleDeleteStep = (stepTextToDelete: string) => {
+  const handleDeleteStep = (e: React.MouseEvent, stepTextToDelete: string) => {
+    e.stopPropagation();
     const routineToUpdate = routines.find(routine => 
       routine.steps.some(s => s.text === stepTextToDelete)
     );
@@ -149,7 +150,7 @@ export function RoutineChecklist({
         )}
       </span>
       {canDeleteItems && (
-        <div role="button" className="flex items-center justify-center w-6 h-6 rounded-full text-destructive/50 hover:text-destructive hover:bg-destructive/10 cursor-pointer" onClick={() => handleDeleteStep(step.text)}>
+        <div role="button" className="flex items-center justify-center w-6 h-6 rounded-full text-destructive/50 hover:text-destructive hover:bg-destructive/10 cursor-pointer" onClick={(e) => handleDeleteStep(e, step.text)}>
             <X className="w-4 h-4" />
         </div>
       )}
