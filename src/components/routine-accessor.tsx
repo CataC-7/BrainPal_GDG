@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/accordion';
 import { dailyWorkflows as initialDailyWorkflows } from '@/lib/data';
 import type { Routine, Step } from '@/lib/data';
-import { ListChecks, Moon, Plus, Sunrise } from 'lucide-react';
+import { ListChecks, Moon, Plus, Sunrise, Users, Bot, Plane } from 'lucide-react';
 import { RoutineChecklist } from './routine-checklist';
 import { KeyValueActivityPairs } from './key-value-activity-pairs';
 import { useState } from 'react';
@@ -151,13 +151,16 @@ export function RoutineAccessor() {
             </CardHeader>
             <CardContent className="px-4 pb-4">
                 <div className="space-y-2 text-sm text-muted-foreground">
-                    <div className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                    <div className="flex items-center gap-2 justify-start p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                        <Users className="w-4 h-4" />
                         <span>Family Visit Protocol</span>
                     </div>
-                    <div className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                    <div className="flex items-center gap-2 justify-start p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                        <Bot className="w-4 h-4" />
                         <span>Choice Overwhelm Protocol</span>
                     </div>
-                    <div className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                    <div className="flex items-center gap-2 justify-start p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                        <Plane className="w-4 h-4" />
                         <span>Travel Protocol</span>
                     </div>
                 </div>

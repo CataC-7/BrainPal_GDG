@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RoutineAccessor } from '@/components/routine-accessor';
+import { AlertTriangle, ToyBrick, Route } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -14,9 +15,18 @@ export default function Home() {
             Support yourself when it matters the most
           </p>
           <div className="mt-6 flex justify-center gap-4">
-            <Button variant="destructive">Emergency Protocol</Button>
-            <Button variant="accent1">Boredom Protocol</Button>
-            <Button variant="accent2">Re-routing Protocol</Button>
+            <Button variant="destructive">
+              <AlertTriangle />
+              Emergency Protocol
+            </Button>
+            <Button variant="accent1">
+              <ToyBrick />
+              Boredom Protocol
+            </Button>
+            <Button variant="accent2">
+              <Route />
+              Re-routing Protocol
+            </Button>
           </div>
         </header>
 
