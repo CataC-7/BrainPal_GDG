@@ -3,8 +3,20 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RoutineAccessor } from '@/components/routine-accessor';
 import { EmergencyProtocolDialog } from '@/components/emergency-protocol-dialog';
 import { AlertTriangle, ToyBrick, Route } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 export default function Home() {
+  const protocolInDevMessage = "This sample protocol is being built - once shipped, you will be able to access it and its associated key activities and sub-tasks";
+
   return (
     <div className="min-h-screen w-full">
       <main className="container mx-auto px-4 py-8 md:py-12">
@@ -22,14 +34,46 @@ export default function Home() {
                 Emergency Protocol
               </Button>
             </EmergencyProtocolDialog>
-            <Button variant="accent1">
-              <ToyBrick />
-              Boredom Protocol
-            </Button>
-            <Button variant="accent2">
-              <Route />
-              Re-routing Protocol
-            </Button>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="accent1">
+                  <ToyBrick />
+                  Boredom Protocol
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Feature in Development</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {protocolInDevMessage}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogAction>Got it!</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="accent2">
+                  <Route />
+                  Re-routing Protocol
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Feature in Development</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {protocolInDevMessage}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogAction>Got it!</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </header>
 

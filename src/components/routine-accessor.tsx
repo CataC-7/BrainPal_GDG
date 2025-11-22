@@ -135,6 +135,8 @@ export function RoutineAccessor() {
     setIsFlowCompleted(true);
   }
 
+  const protocolInDevMessage = "This sample protocol is being built - once shipped, you will be able to access it and its associated key activities and sub-tasks";
+
   return (
     <div className="space-y-4">
        {allTasksCompleted && <CompletionCelebration />}
@@ -194,18 +196,63 @@ export function RoutineAccessor() {
             </CardHeader>
             <CardContent className="px-4 pb-4">
                 <div className="text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
-                        <Users className="w-4 h-4" />
-                        <span>Family Visit Protocol</span>
-                    </div>
-                    <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
-                        <Bot className="w-4 h-4" />
-                        <span>Choice Overwhelm Protocol</span>
-                    </div>
-                    <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
-                        <Plane className="w-4 h-4" />
-                        <span>Travel Protocol</span>
-                    </div>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
+                            <Users className="w-4 h-4" />
+                            <span>Family Visit Protocol</span>
+                        </div>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Feature in Development</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            {protocolInDevMessage}
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogAction>Got it!</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
+                            <Bot className="w-4 h-4" />
+                            <span>Choice Overwhelm Protocol</span>
+                        </div>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Feature in Development</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            {protocolInDevMessage}
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogAction>Got it!</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
+                            <Plane className="w-4 h-4" />
+                            <span>Travel Protocol</span>
+                        </div>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Feature in Development</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            {protocolInDevMessage}
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogAction>Got it!</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                 </div>
             </CardContent>
           </Card>
