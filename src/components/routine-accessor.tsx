@@ -29,6 +29,7 @@ export function RoutineAccessor() {
   const [isFlowCompleted, setIsFlowCompleted] = useState(false);
   const [allTasksCompleted, setAllTasksCompleted] = useState(false);
   const [isMorningRoutineEditing, setIsMorningRoutineEditing] = useState(false);
+  const [isNightRoutineEditing, setIsNightRoutineEditing] = useState(false);
 
   useEffect(() => {
     const allSteps = dailyWorkflows.flatMap(r => r.steps);
@@ -139,9 +140,17 @@ export function RoutineAccessor() {
   const handleCompleteMorningEditing = () => {
     setIsMorningRoutineEditing(false);
   }
+
+  const handleCompleteNightEditing = () => {
+    setIsNightRoutineEditing(false);
+  }
   
   const toggleMorningRoutineEditing = () => {
     setIsMorningRoutineEditing(prev => !prev);
+  }
+
+  const toggleNightRoutineEditing = () => {
+    setIsNightRoutineEditing(prev => !prev);
   }
 
   const protocolInDevMessage = "This sample protocol is being built - once shipped, you will be able to access it and its associated key activities and sub-tasks";
@@ -180,6 +189,12 @@ export function RoutineAccessor() {
             icon={<Moon className="text-primary" />}
             routines={nightRoutines}
             onStepsUpdate={handleStepsUpdate}
+            isSortable={isNightRoutineEditing}
+            onDragEnd={(e) => handleDragEnd(e, 'dwf-night')}
+            canAddTasks={isNightRoutineEditing}
+            canDeleteItems={isNightRoutineEditing}
+            onComplete={handleCompleteNightEditing}
+            isEditing={isNightRoutineEditing}
           />
         </div>
 
@@ -283,25 +298,12 @@ export function RoutineAccessor() {
                             <span>Modify Morning Routine</span>
                         </div>
                    
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
+                    
+                        <div onClick={toggleNightRoutineEditing} className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
                             <Moon className="w-4 h-4" />
                             <span>Modify Night Routine</span>
                         </div>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Feature in Development</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This feature is still in development - once shipped, you will be able to customise your night routine by adding/removing items. Once done, you will see the updated routine statically in your screen
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogAction>Got it!</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                  
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
