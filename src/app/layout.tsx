@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'RoutineRecall',
+  title: 'BrainPal',
   description:
     'Easily store and access your daily workflows and emergency interventions.',
 };
