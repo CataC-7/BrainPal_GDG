@@ -3,82 +3,109 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Check, Circle } from 'lucide-react';
+import { Check, Circle, GripVertical, PlusCircle } from 'lucide-react';
 import type { Routine, Step } from '@/lib/data';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { SortableItem } from './sortable-item';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
 
 interface RoutineChecklistProps {
   title: string;
   icon: React.ReactNode;
   routines: Routine[];
   onStepsUpdate: (routineId: string, steps: Step[]) => void;
+  isSortable?: boolean;
+  onDragEnd?: (event: any) => void;
+  canAddTasks?: boolean;
 }
 
-function formatStepText(text: string) {
-    if (text.startsWith('*') && text.endsWith('*')) {
-      return (
-        <span className="italic">
-          {text.substring(1, text.length - 1)}
-          <span className="font-sans not-italic"> *</span>
-        </span>
-      );
-    }
-    return text;
-  }
-
-export function RoutineChecklist({ title, icon, routines, onStepsUpdate }: RoutineChecklistProps) {
+export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSortable = false, onDragEnd, canAddTasks = false }: RoutineChecklistProps) {
   const allSteps = useMemo(() => routines.flatMap(r => r.steps.map(s => ({...s, routineId: r.id}))), [routines]);
+  const [newActivity, setNewActivity] = useState('');
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const [lineHeight, setLineHeight] = useState(0);
-
-  useEffect(() => {
-    // A timeout is used to ensure all elements are rendered before we calculate the height.
-    const timer = setTimeout(() => {
-      if (containerRef.current) {
-        const items = containerRef.current.children;
-        if (items.length > 1) {
-          const firstItem = items[0] as HTMLDivElement;
-          const lastItem = items[items.length - 1] as HTMLDivElement;
-          const firstCircle = firstItem.querySelector('button');
-          const lastCircle = lastItem.querySelector('button');
-          if (firstCircle && lastCircle) {
-             const firstRect = firstCircle.getBoundingClientRect();
-             const lastRect = lastCircle.getBoundingClientRect();
-             const containerRect = containerRef.current.getBoundingClientRect();
-             const height = (lastRect.top - containerRect.top) - (firstRect.top - containerRect.top);
-             setLineHeight(height);
-          }
-        } else {
-          setLineHeight(0);
-        }
-      }
-    }, 50); // Increased timeout slightly for stability
   
-    return () => clearTimeout(timer);
-  }, [allSteps]);
-
-
-  const handleStepToggle = (toggledStepIndex: number) => {
-    const newStepsForRoutine = [...allSteps];
-    const toggledStep = newStepsForRoutine[toggledStepIndex];
+  const handleStepToggle = (toggledStepText: string) => {
+    const stepToToggle = allSteps.find(s => s.text === toggledStepText);
+    if (!stepToToggle) return;
     
-    // Find all steps for the specific routine
-    const routineSteps = routines.find(r => r.id === toggledStep.routineId)?.steps || [];
-    const newRoutineSteps = routineSteps.map(step => {
-        if(step.text === toggledStep.text) {
+    const routine = routines.find(r => r.id === stepToToggle.routineId);
+    if (!routine) return;
+
+    const newRoutineSteps = routine.steps.map(step => {
+        if(step.text === toggledStepText) {
             return {...step, completed: !step.completed};
         }
         return step;
     });
 
-    onStepsUpdate(toggledStep.routineId, newRoutineSteps);
+    onStepsUpdate(stepToToggle.routineId, newRoutineSteps);
   };
 
-  const allCompleted = useMemo(() => allSteps.every(step => step.completed), [allSteps]);
+  const handleAddNewActivity = () => {
+    if (newActivity.trim() === '') return;
+    const routine = routines[0];
+    if (routine) {
+        const newSteps = [...routine.steps, {text: newActivity, completed: false}];
+        onStepsUpdate(routine.id, newSteps);
+        setNewActivity('');
+    }
+  }
 
-  if (allSteps.length === 0) {
+  const allCompleted = useMemo(() => allSteps.length > 0 && allSteps.every(step => step.completed), [allSteps]);
+
+  if (allSteps.length === 0 && !canAddTasks) {
     return null;
   }
+
+  const checklistContent = (
+    <div ref={containerRef} className="relative">
+      {allSteps.map((step) => (
+         <SortableItem key={step.text} id={step.text} isSortable={isSortable}>
+            <div className="flex items-center mb-4 last:mb-0 relative pl-10">
+                {isSortable && <GripVertical className="absolute left-0 text-muted-foreground/50" />}
+                <button
+                    onClick={() => handleStepToggle(step.text)}
+                    className={cn(
+                    "flex items-center justify-center w-6 h-6 rounded-full border-2 transition-colors z-10",
+                    "absolute left-6 bg-background",
+                    step.completed
+                        ? "bg-accent border-accent-foreground/50"
+                        : "border-border hover:border-primary"
+                    )}
+                >
+                    {step.completed ? (
+                    <Check className="w-4 h-4 text-accent-foreground" />
+                    ) : (
+                    <Circle className="w-3 h-3 text-muted-foreground/50 fill-current" />
+                    )}
+                </button>
+                <span
+                    className={cn(
+                    "text-muted-foreground transition-opacity",
+                    step.completed && "opacity-50 line-through"
+                    )}
+                >
+                     {step.text.startsWith('*') && step.text.endsWith('*') ? (
+                        <span className="italic">{step.text.slice(1, -1)}</span>
+                    ) : (
+                        step.text
+                    )}
+                </span>
+            </div>
+         </SortableItem>
+      ))}
+    </div>
+  );
 
   return (
     <Card className={cn(
@@ -92,45 +119,26 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate }: Routi
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div ref={containerRef} className="relative">
-           {lineHeight > 0 && (
-            <div
-                className="absolute left-[12px] w-px bg-border -translate-x-1/2"
-                style={{ 
-                    top: '12px', // half of the circle height
-                    height: `${lineHeight}px` 
-                }}
-            ></div>
-           )}
-          {allSteps.map((step, index) => (
-            <div key={index} className="flex items-center mb-4 last:mb-0 relative pl-10">
-              <button
-                onClick={() => handleStepToggle(index)}
-                className={cn(
-                  "flex items-center justify-center w-6 h-6 rounded-full border-2 transition-colors z-10",
-                  "absolute left-[0px] bg-background",
-                  step.completed
-                    ? "bg-accent border-accent-foreground/50"
-                    : "border-border hover:border-primary"
-                )}
-              >
-                {step.completed ? (
-                  <Check className="w-4 h-4 text-accent-foreground" />
-                ) : (
-                  <Circle className="w-3 h-3 text-muted-foreground/50 fill-current" />
-                )}
-              </button>
-              <span
-                className={cn(
-                  "text-muted-foreground transition-opacity",
-                  step.completed && "opacity-50 line-through"
-                )}
-              >
-                {formatStepText(step.text)}
-              </span>
+        {isSortable ? (
+             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+                <SortableContext items={allSteps.map(s => s.text)} strategy={verticalListSortingStrategy}>
+                    {checklistContent}
+                </SortableContext>
+            </DndContext>
+        ) : checklistContent}
+        {canAddTasks && (
+            <div className="flex items-center gap-2 mt-4 pl-10 relative">
+                 <PlusCircle className="w-6 h-6 absolute left-0 text-muted-foreground/50 top-1/2 -translate-y-1/2" />
+                 <Input 
+                    placeholder="Add new activity..."
+                    value={newActivity}
+                    onChange={(e) => setNewActivity(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddNewActivity()}
+                    className="h-9 flex-1 bg-transparent"
+                 />
+                 <Button size="sm" onClick={handleAddNewActivity} variant="ghost">Add</Button>
             </div>
-          ))}
-        </div>
+        )}
       </CardContent>
     </Card>
   );

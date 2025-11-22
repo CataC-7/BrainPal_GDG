@@ -143,7 +143,7 @@ export function KeyValueActivityPairs({ onActivityChange, onNonNegotiablesChange
                         <Combobox options={activityOptions.mobility} defaultLabel="Select type..." activityKey="mobility" onActivityChange={onActivityChange} />
                     </div>
                     <div className="flex items-center justify-between">
-                        <span>Three Non-Negotiables</span>
+                        <span className="italic">Three Non-Negotiables *</span>
                         <Input 
                             className="w-[200px] h-9 bg-muted/50"
                             placeholder="Type in a maximum of 3 tasks separated by a comma"

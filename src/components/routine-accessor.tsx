@@ -13,6 +13,7 @@ import { RoutineChecklist } from './routine-checklist';
 import { KeyValueActivityPairs } from './key-value-activity-pairs';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { arrayMove } from '@dnd-kit/sortable';
 
 export function RoutineAccessor() {
   const [dailyWorkflows, setDailyWorkflows] = useState<Routine[]>(initialDailyWorkflows);
@@ -93,6 +94,24 @@ export function RoutineAccessor() {
       });
     });
   };
+  
+  const handleDragEnd = (event: any, routineId: string) => {
+    const {active, over} = event;
+    if (active.id !== over.id) {
+        setDailyWorkflows((workflows) => {
+            const newWorkflows = workflows.map(w => {
+                if (w.id === routineId) {
+                    const oldIndex = w.steps.findIndex(s => s.text === active.id);
+                    const newIndex = w.steps.findIndex(s => s.text === over.id);
+                    return {...w, steps: arrayMove(w.steps, oldIndex, newIndex)};
+                }
+                return w;
+            });
+            return newWorkflows;
+        });
+    }
+  };
+
 
   return (
     <div className="space-y-4">
@@ -105,12 +124,18 @@ export function RoutineAccessor() {
             routines={morningRoutines}
             onStepsUpdate={handleStepsUpdate}
           />
-          <RoutineChecklist
-            title="Today's Flow"
-            icon={<ListChecks className="text-primary" />}
-            routines={flowRoutines}
-            onStepsUpdate={handleStepsUpdate}
-          />
+          <div>
+            <RoutineChecklist
+                title="Today's Flow"
+                icon={<ListChecks className="text-primary" />}
+                routines={flowRoutines}
+                onStepsUpdate={handleStepsUpdate}
+                isSortable={true}
+                onDragEnd={(e) => handleDragEnd(e, 'dwf-flow')}
+                canAddTasks={true}
+            />
+            <p className="text-xs text-muted-foreground italic text-right pr-2 pt-1">Drag and drop to re-order</p>
+          </div>
           <RoutineChecklist
             title="Night Routine"
             icon={<Moon className="text-primary" />}
