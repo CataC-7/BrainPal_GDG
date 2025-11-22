@@ -1,6 +1,7 @@
 # 🧠 BrainPal
 
 BrainPal is a personal support application designed to help users, particularly those who are neurodivergent, to structure their day, manage routines, and access pre-defined protocols during moments of overwhelm. It provides a simple and calming interface to create consistency and reduce cognitive load.
+**See Demo BrainPal.mp4 for a Video of How it works
 
 ## ✨ Features
 
