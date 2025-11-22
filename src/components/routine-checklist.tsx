@@ -3,7 +3,7 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Check, Circle, PlusCircle } from 'lucide-react';
+import { Check, Circle, PlusCircle, X } from 'lucide-react';
 import type { Routine, Step } from '@/lib/data';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -19,11 +19,25 @@ interface RoutineChecklistProps {
   isSortable?: boolean;
   onDragEnd?: (event: any) => void;
   canAddTasks?: boolean;
+  canDeleteItems?: boolean;
   onComplete?: () => void;
   isCompleted?: boolean;
+  isEditing?: boolean;
 }
 
-export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSortable = false, onDragEnd, canAddTasks = false, onComplete, isCompleted = false }: RoutineChecklistProps) {
+export function RoutineChecklist({ 
+    title, 
+    icon, 
+    routines, 
+    onStepsUpdate, 
+    isSortable = false, 
+    onDragEnd, 
+    canAddTasks = false, 
+    canDeleteItems = false,
+    onComplete, 
+    isCompleted = false,
+    isEditing = false
+}: RoutineChecklistProps) {
   const allSteps = useMemo(() => routines.flatMap(r => r.steps.map(s => ({...s, routineId: r.id}))), [routines]);
   const [newActivity, setNewActivity] = useState('');
 
@@ -87,6 +101,17 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
     }
   }
 
+  const handleDeleteStep = (stepTextToDelete: string) => {
+    const routineToUpdate = routines.find(routine => 
+      routine.steps.some(s => s.text === stepTextToDelete)
+    );
+
+    if (!routineToUpdate) return;
+
+    const newSteps = routineToUpdate.steps.filter(step => step.text !== stepTextToDelete);
+    onStepsUpdate(routineToUpdate.id, newSteps);
+  }
+
   const allCompleted = useMemo(() => allSteps.length > 0 && allSteps.every(step => step.completed), [allSteps]);
 
   if (allSteps.length === 0 && !canAddTasks) {
@@ -94,12 +119,12 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   }
   
   const renderChecklistItem = (step: (Step & {routineId: string})) => (
-    <div className="flex items-center relative pl-12" data-checklist-item="true">
+    <div className="flex items-center relative pl-12 group" data-checklist-item="true">
       <button
         onClick={() => handleStepToggle(step.text)}
         className={cn(
           "flex items-center justify-center w-6 h-6 rounded-full border-2 transition-colors z-10",
-          "absolute left-6 transform -translate-x-1/2 top-0",
+          "absolute left-6 transform -translate-x-1/2 top-1/2 -translate-y-1/2",
           step.completed ? "bg-accent border-accent-foreground/50" : "border-border hover:border-primary bg-background"
         )}
         disabled={title === "Today's Flow" && !isCompleted}
@@ -112,7 +137,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
       </button>
       <span
         className={cn(
-          "text-muted-foreground transition-opacity",
+          "text-muted-foreground transition-opacity flex-grow",
           step.completed && "opacity-50 line-through"
         )}
       >
@@ -122,6 +147,11 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
           step.text
         )}
       </span>
+      {canDeleteItems && (
+        <Button variant="ghost" size="icon" className="w-6 h-6 rounded-full text-destructive/50 hover:text-destructive hover:bg-destructive/10" onClick={() => handleDeleteStep(step.text)}>
+            <X className="w-4 h-4" />
+        </Button>
+      )}
     </div>
   );
 
@@ -144,7 +174,8 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   return (
     <Card className={cn(
       "transition-colors duration-300",
-      allCompleted && "bg-accent/40 border-accent"
+      allCompleted && title !== "Today's Flow" && "bg-accent/40 border-accent",
+      allCompleted && title === "Today's Flow" && "bg-accent/40 border-accent"
     )}>
       <CardHeader className="flex-row items-start justify-between">
         <div>
@@ -152,14 +183,22 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
             {icon}
             {title}
           </CardTitle>
-          {isSortable && !isCompleted && (
+          {isSortable && !isCompleted && !isEditing && (
+            <CardDescription className="text-xs italic !mt-0">
+              Drag and drop to re-order
+            </CardDescription>
+          )}
+           {isEditing && (
             <CardDescription className="text-xs italic !mt-0">
               Drag and drop to re-order
             </CardDescription>
           )}
         </div>
-        {onComplete && !isCompleted && (
+        {onComplete && !isCompleted && !isEditing && (
           <Button onClick={onComplete} size="sm" variant="outline">Finish List</Button>
+        )}
+         {isEditing && onComplete && (
+          <Button onClick={onComplete} size="sm" variant="outline">Finish Editing</Button>
         )}
       </CardHeader>
       <CardContent>

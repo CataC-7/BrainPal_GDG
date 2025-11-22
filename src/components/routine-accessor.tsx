@@ -28,6 +28,7 @@ export function RoutineAccessor() {
   const { toast } = useToast();
   const [isFlowCompleted, setIsFlowCompleted] = useState(false);
   const [allTasksCompleted, setAllTasksCompleted] = useState(false);
+  const [isMorningRoutineEditing, setIsMorningRoutineEditing] = useState(false);
 
   useEffect(() => {
     const allSteps = dailyWorkflows.flatMap(r => r.steps);
@@ -135,6 +136,14 @@ export function RoutineAccessor() {
     setIsFlowCompleted(true);
   }
 
+  const handleCompleteMorningEditing = () => {
+    setIsMorningRoutineEditing(false);
+  }
+  
+  const toggleMorningRoutineEditing = () => {
+    setIsMorningRoutineEditing(prev => !prev);
+  }
+
   const protocolInDevMessage = "This sample protocol is being built - once shipped, you will be able to access it and its associated key activities and sub-tasks";
 
   return (
@@ -148,6 +157,12 @@ export function RoutineAccessor() {
             icon={<Sunrise className="text-primary" />}
             routines={morningRoutines}
             onStepsUpdate={handleStepsUpdate}
+            isSortable={isMorningRoutineEditing}
+            onDragEnd={(e) => handleDragEnd(e, 'dwf-morning')}
+            canAddTasks={isMorningRoutineEditing}
+            canDeleteItems={isMorningRoutineEditing}
+            onComplete={handleCompleteMorningEditing}
+            isEditing={isMorningRoutineEditing}
           />
           <RoutineChecklist
               title="Today's Flow"
@@ -262,25 +277,12 @@ export function RoutineAccessor() {
             </CardHeader>
             <CardContent className="px-4 pb-4">
                 <div className="text-sm text-muted-foreground">
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
+                    
+                        <div onClick={toggleMorningRoutineEditing} className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
                             <Sunrise className="w-4 h-4" />
                             <span>Modify Morning Routine</span>
                         </div>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Feature in Development</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This feature is still in development - once shipped, you will be able to customise your morning routine by adding/removing items. Once done, you will see the updated routine statically in your screen
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogAction>Got it!</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                   
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
