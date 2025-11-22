@@ -58,20 +58,20 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   }, [allSteps, containerRef, isSortable]);
   
   const handleStepToggle = (toggledStepText: string) => {
-    const stepToToggle = allSteps.find(s => s.text === toggledStepText);
+    const stepToToggle = allSteps.find((s) => s.text === toggledStepText);
     if (!stepToToggle) return;
-    
-    const routine = routines.find(r => r.id === stepToToggle.routineId);
-    if (!routine) return;
 
-    const newRoutineSteps = routine.steps.map(step => {
-        if(step.text === toggledStepText) {
-            return {...step, completed: !step.completed};
-        }
-        return step;
+    const routineForStep = routines.find((r) => r.id === stepToToggle.routineId);
+    if (!routineForStep) return;
+
+    const newRoutineSteps = routineForStep.steps.map((step) => {
+      if (step.text === toggledStepText) {
+        return { ...step, completed: !step.completed };
+      }
+      return step;
     });
 
-    onStepsUpdate(stepToToggle.routineId, newRoutineSteps);
+    onStepsUpdate(routineForStep.id, newRoutineSteps);
   };
 
   const handleAddNewActivity = () => {
