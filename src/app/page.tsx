@@ -14,9 +14,9 @@ export default function Home() {
             Support yourself when it matters the most
           </p>
           <div className="mt-6 flex justify-center gap-4">
-            <Button variant="accent1">Emergency Protocol</Button>
-            <Button variant="accent2">Boredom Protocol</Button>
-            <Button variant="outline">Re-routing Protocol</Button>
+            <Button variant="destructive">Emergency Protocol</Button>
+            <Button variant="accent1">Boredom Protocol</Button>
+            <Button variant="accent2">Re-routing Protocol</Button>
           </div>
         </header>
 
