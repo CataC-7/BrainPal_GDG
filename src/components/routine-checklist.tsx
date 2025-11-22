@@ -125,7 +125,8 @@ export function RoutineChecklist({
         className={cn(
           "flex items-center justify-center w-6 h-6 rounded-full border-2 transition-colors z-10",
           "absolute left-6 transform -translate-x-1/2 top-1/2 -translate-y-1/2",
-          step.completed ? "bg-accent border-accent-foreground/50" : "border-border hover:border-primary bg-background"
+          step.completed ? "bg-accent border-accent-foreground/50" : "border-border hover:border-primary bg-background",
+          (title === "Today's Flow" && !isCompleted) && "cursor-not-allowed"
         )}
         disabled={title === "Today's Flow" && !isCompleted}
       >
@@ -174,8 +175,7 @@ export function RoutineChecklist({
   return (
     <Card className={cn(
       "transition-colors duration-300",
-      allCompleted && title !== "Today's Flow" && "bg-accent/40 border-accent",
-      allCompleted && title === "Today's Flow" && "bg-accent/40 border-accent"
+      allCompleted && "bg-accent/40 border-accent"
     )}>
       <CardHeader className="flex-row items-start justify-between">
         <div>
