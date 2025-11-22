@@ -24,6 +24,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // This code runs only on the client, after the component has mounted.
+    // This avoids issues with `localStorage` being unavailable on the server.
     const storedName = localStorage.getItem('brainpal-username');
     if (storedName) {
       setUserName(storedName);
