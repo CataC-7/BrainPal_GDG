@@ -64,16 +64,22 @@ export function RoutineAccessor() {
     const newSteps: Step[] = tasks.map(task => ({ text: `*${task}*`, completed: false }));
   
     setDailyWorkflows(prevWorkflows => {
+      const flowRoutine = prevWorkflows.find(workflow => workflow.id === 'dwf-flow');
+      if (!flowRoutine) return prevWorkflows;
+  
+      // Filter out only the old non-negotiables, keep the other tasks
+      const existingManualSteps = flowRoutine.steps.filter(step => !step.text.startsWith('*') || !step.text.endsWith('*'));
+  
+      let updatedSteps;
+      if (value.trim() === '') {
+        updatedSteps = existingManualSteps;
+      } else {
+        updatedSteps = [...existingManualSteps, ...newSteps];
+      }
+      
       return prevWorkflows.map(workflow => {
         if (workflow.id === 'dwf-flow') {
-          // Keep existing activities that are not non-negotiables
-          const existingSteps = workflow.steps.filter(step => !step.text.startsWith('*'));
-          
-          if (value.trim() === '') {
-            return { ...workflow, steps: existingSteps };
-          }
-          
-          return { ...workflow, steps: [...existingSteps, ...newSteps] };
+          return { ...workflow, steps: updatedSteps };
         }
         return workflow;
       });
