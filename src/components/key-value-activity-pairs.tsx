@@ -145,8 +145,8 @@ export function KeyValueActivityPairs({ onActivityChange, onNonNegotiablesChange
                     <div className="flex items-center justify-between">
                         <span className="italic">Three Non-Negotiables *</span>
                         <Input 
-                            className="w-[200px] h-9 bg-muted/50"
-                            placeholder="Type in a maximum of 3 tasks separated by a comma"
+                            className="w-[200px] h-9 bg-muted/50 text-sm"
+                            placeholder="Type max 3, separated by a comma"
                             onChange={(e) => onNonNegotiablesChange(e.target.value)}
                         />
                     </div>
