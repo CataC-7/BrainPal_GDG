@@ -41,7 +41,7 @@ export const dailyWorkflows: Routine[] = [
       { text: 'Friend Replies', completed: false },
       { text: 'Physio', completed: false },
       { text: 'Journal', completed: false },
-      { text: 'Stretch', completed: false },
+      { text: 'Mobility', completed: false },
       { text: 'Go to Sleep', completed: false },
     ],
     category: 'night',
@@ -84,5 +84,10 @@ export const activityOptions = {
         { value: 'javascript', label: 'JavaScript' },
         { value: 'agentic_ai', label: 'Agentic AI' },
         { value: 'marketing', label: 'Marketing' },
+    ],
+    mobility: [
+        { value: 'neck', label: 'Neck' },
+        { value: 'back', label: 'Back' },
+        { value: 'ankle', label: 'Ankle' },
     ]
 }

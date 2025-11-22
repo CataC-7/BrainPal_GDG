@@ -136,6 +136,10 @@ export function KeyValueActivityPairs({ onActivityChange }: KeyValueActivityPair
                         <span>Online Learning</span>
                         <Combobox options={activityOptions.onlineLearning} defaultLabel="Select type..." activityKey="onlineLearning" onActivityChange={onActivityChange} />
                     </div>
+                    <div className="flex items-center justify-between">
+                        <span>Mobility</span>
+                        <Combobox options={activityOptions.mobility} defaultLabel="Select type..." activityKey="mobility" onActivityChange={onActivityChange} />
+                    </div>
                 </div>
             </CardContent>
         </Card>
