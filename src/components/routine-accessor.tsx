@@ -20,6 +20,7 @@ import { Button } from './ui/button';
 export function RoutineAccessor() {
   const [dailyWorkflows, setDailyWorkflows] = useState<Routine[]>(initialDailyWorkflows);
   const { toast } = useToast();
+  const [isFlowCompleted, setIsFlowCompleted] = useState(false);
 
   const morningRoutines = dailyWorkflows.filter(
     (r) => r.category === 'morning'
@@ -70,7 +71,6 @@ export function RoutineAccessor() {
       const newWorkflows = [...prevWorkflows];
       const flowRoutine = newWorkflows[flowRoutineIndex];
 
-      // Filter out only the old non-negotiables, keep the other tasks
       const existingManualSteps = flowRoutine.steps.filter(step => !step.text.startsWith('*'));
   
       let updatedSteps;
@@ -114,6 +114,19 @@ export function RoutineAccessor() {
     }
   };
 
+  const handleCompleteFlow = () => {
+    setIsFlowCompleted(true);
+    setDailyWorkflows(prevWorkflows => {
+      return prevWorkflows.map(workflow => {
+        if (workflow.id === 'dwf-flow') {
+          const completedSteps = workflow.steps.map(step => ({...step, completed: true}));
+          return {...workflow, steps: completedSteps};
+        }
+        return workflow;
+      })
+    })
+  }
+
 
   return (
     <div className="space-y-4">
@@ -133,7 +146,9 @@ export function RoutineAccessor() {
               onStepsUpdate={handleStepsUpdate}
               isSortable={true}
               onDragEnd={(e) => handleDragEnd(e, 'dwf-flow')}
-              canAddTasks={true}
+              canAddTasks={!isFlowCompleted}
+              onComplete={handleCompleteFlow}
+              isCompleted={isFlowCompleted}
           />
           <RoutineChecklist
             title="Night Routine"
@@ -145,7 +160,7 @@ export function RoutineAccessor() {
 
         {/* Protocols Column */}
         <div className="space-y-4">
-          <KeyValueActivityPairs onActivityChange={handleActivityChange} onNonNegotiablesChange={handleNonNegotiablesChange} />
+          <KeyValueActivityPairs onActivityChange={handleActivityChange} onNonNegotiablesChange={handleNonNegotiablesChange} isFlowCompleted={isFlowCompleted} />
           <Card className="border bg-card rounded-md">
             <CardHeader className="px-4 pt-4 pb-2 flex-row items-center justify-between">
               <CardTitle className="text-left font-semibold text-base">My Protocols</CardTitle>

@@ -116,9 +116,10 @@ function Combobox({ options, defaultLabel, activityKey, onActivityChange }: Comb
 interface KeyValueActivityPairsProps {
     onActivityChange: (activityKey: string, value: string) => void;
     onNonNegotiablesChange: (value: string) => void;
+    isFlowCompleted?: boolean;
 }
 
-export function KeyValueActivityPairs({ onActivityChange, onNonNegotiablesChange }: KeyValueActivityPairsProps) {
+export function KeyValueActivityPairs({ onActivityChange, onNonNegotiablesChange, isFlowCompleted = false }: KeyValueActivityPairsProps) {
     return (
         <Card className="border bg-card rounded-md">
             <CardHeader className="px-4 pt-4 pb-2">
@@ -148,6 +149,7 @@ export function KeyValueActivityPairs({ onActivityChange, onNonNegotiablesChange
                             className="w-[200px] h-9 bg-muted/50 text-sm"
                             placeholder="Type max 3, separated by a comma"
                             onChange={(e) => onNonNegotiablesChange(e.target.value)}
+                            disabled={isFlowCompleted}
                         />
                     </div>
                 </div>

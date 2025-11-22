@@ -19,9 +19,11 @@ interface RoutineChecklistProps {
   isSortable?: boolean;
   onDragEnd?: (event: any) => void;
   canAddTasks?: boolean;
+  onComplete?: () => void;
+  isCompleted?: boolean;
 }
 
-export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSortable = false, onDragEnd, canAddTasks = false }: RoutineChecklistProps) {
+export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSortable = false, onDragEnd, canAddTasks = false, onComplete, isCompleted = false }: RoutineChecklistProps) {
   const allSteps = useMemo(() => routines.flatMap(r => r.steps.map(s => ({...s, routineId: r.id}))), [routines]);
   const [newActivity, setNewActivity] = useState('');
 
@@ -57,19 +59,20 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
     }
   }, [allSteps, containerRef, isSortable]);
   
-  const handleStepToggle = (toggledStepText: string, routineId: string) => {
-    const routine = routines.find(r => r.id === routineId);
-    if (!routine) return;
-
-    const newSteps = routine.steps.map(step => {
+  const handleStepToggle = (toggledStepText: string) => {
+    const routineToUpdate = routines.find(r => r.steps.some(s => s.text === toggledStepText));
+    if (!routineToUpdate) return;
+  
+    const newSteps = routineToUpdate.steps.map(step => {
       if (step.text === toggledStepText) {
         return { ...step, completed: !step.completed };
       }
       return step;
     });
-
-    onStepsUpdate(routineId, newSteps);
+  
+    onStepsUpdate(routineToUpdate.id, newSteps);
   };
+  
 
   const handleAddNewActivity = () => {
     if (newActivity.trim() === '') return;
@@ -90,12 +93,13 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   const renderChecklistItem = (step: (Step & {routineId: string})) => (
     <div className="flex items-center relative pl-12" data-checklist-item="true">
       <button
-        onClick={() => handleStepToggle(step.text, step.routineId)}
+        onClick={() => handleStepToggle(step.text)}
         className={cn(
           "flex items-center justify-center w-6 h-6 rounded-full border-2 transition-colors z-10",
           "absolute left-6 transform -translate-x-1/2 top-0",
           step.completed ? "bg-accent border-accent-foreground/50" : "border-border hover:border-primary bg-background"
         )}
+        disabled={title === "Today's Flow" && isCompleted}
       >
         {step.completed ? (
           <Check className="w-4 h-4 text-accent-foreground" />
@@ -127,7 +131,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
          ></div>
       )}
       {allSteps.map((step) => (
-         <SortableItem key={step.text} id={step.text} isSortable={isSortable} className="mb-2 last:mb-0">
+         <SortableItem key={step.text} id={step.text} isSortable={isSortable && !isCompleted} className="mb-2 last:mb-0">
             {renderChecklistItem(step)}
          </SortableItem>
       ))}
@@ -137,17 +141,22 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   return (
     <Card className={cn(
       "transition-colors duration-300",
-      allCompleted && allSteps.length > 0 && "bg-accent/40 border-accent"
+      (allCompleted || isCompleted) && allSteps.length > 0 && "bg-accent/40 border-accent"
     )}>
-      <CardHeader>
-        <CardTitle className="text-xl font-semibold flex items-center gap-2">
-          {icon}
-          {title}
-        </CardTitle>
-        {isSortable && (
-          <CardDescription className="text-xs italic !mt-0">
-            Drag and drop to re-order
-          </CardDescription>
+      <CardHeader className="flex-row items-start justify-between">
+        <div>
+          <CardTitle className="text-xl font-semibold flex items-center gap-2">
+            {icon}
+            {title}
+          </CardTitle>
+          {isSortable && !isCompleted && (
+            <CardDescription className="text-xs italic !mt-0">
+              Drag and drop to re-order
+            </CardDescription>
+          )}
+        </div>
+        {onComplete && !isCompleted && (
+          <Button onClick={onComplete} size="sm">Complete</Button>
         )}
       </CardHeader>
       <CardContent>
