@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { Check, Circle, PlusCircle } from 'lucide-react';
 import type { Routine, Step } from '@/lib/data';
@@ -10,7 +10,6 @@ import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrate
 import { SortableItem } from './sortable-item';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
-import { CardDescription } from './ui/card';
 
 interface RoutineChecklistProps {
   title: string;
