@@ -60,8 +60,19 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   }, [allSteps, containerRef, isSortable]);
   
   const handleStepToggle = (toggledStepText: string) => {
-    const routineToUpdate = routines.find(r => r.steps.some(s => s.text === toggledStepText));
-    if (!routineToUpdate) return;
+    let routineToUpdate: Routine | undefined;
+    let stepToUpdate: (Step & { routineId: string }) | undefined;
+
+    for (const routine of routines) {
+        const foundStep = routine.steps.find(s => s.text === toggledStepText);
+        if (foundStep) {
+            routineToUpdate = routine;
+            stepToUpdate = { ...foundStep, routineId: routine.id };
+            break;
+        }
+    }
+
+    if (!routineToUpdate || !stepToUpdate) return;
   
     const newSteps = routineToUpdate.steps.map(step => {
       if (step.text === toggledStepText) {
@@ -99,7 +110,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
           "absolute left-6 transform -translate-x-1/2 top-0",
           step.completed ? "bg-accent border-accent-foreground/50" : "border-border hover:border-primary bg-background"
         )}
-        disabled={title === "Today's Flow" && isCompleted}
+        disabled={title === "Today's Flow" && !isCompleted}
       >
         {step.completed ? (
           <Check className="w-4 h-4 text-accent-foreground" />
