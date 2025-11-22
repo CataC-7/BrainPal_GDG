@@ -1,7 +1,6 @@
 import { RoutineAccessor } from '@/components/routine-accessor';
-import { RoutineCreator } from '@/components/routine-creator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, ClipboardList } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -16,8 +15,8 @@ export default function Home() {
           </p>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <Card className="shadow-lg transition-shadow hover:shadow-xl">
+        <div className="flex justify-center">
+          <Card className="shadow-lg transition-shadow hover:shadow-xl w-full lg:w-3/4">
             <CardHeader>
               <CardTitle className="flex items-center gap-3 text-2xl font-semibold">
                 <BookOpen className="text-primary" />
@@ -26,17 +25,6 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <RoutineAccessor />
-            </CardContent>
-          </Card>
-          <Card className="shadow-lg transition-shadow hover:shadow-xl">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-2xl font-semibold">
-                <ClipboardList className="text-primary" />
-                Create a Routine
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <RoutineCreator />
             </CardContent>
           </Card>
         </div>
