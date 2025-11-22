@@ -183,18 +183,13 @@ export function RoutineChecklist({
             {icon}
             {title}
           </CardTitle>
-          {isSortable && !isCompleted && !isEditing && (
-            <CardDescription className="text-xs italic !mt-0">
-              Drag and drop to re-order
-            </CardDescription>
-          )}
-           {isEditing && (
+          {isEditing && (
             <CardDescription className="text-xs italic !mt-0">
               Drag and drop to re-order
             </CardDescription>
           )}
         </div>
-        {onComplete && !isCompleted && !isEditing && (
+        {onComplete && !isCompleted && !isEditing && title === "Today's Flow" && (
           <Button onClick={onComplete} size="sm" variant="outline">Finish List</Button>
         )}
          {isEditing && onComplete && (
