@@ -5,9 +5,6 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { dailyWorkflows, protocols } from '@/lib/data';
-import { ShieldAlert, ToyBrick, Route } from 'lucide-react';
-import { Button } from './ui/button';
-import { Card, CardHeader, CardTitle } from './ui/card';
 import { ListChecks, Moon, Sunrise } from 'lucide-react';
 import { RoutineChecklist } from './routine-checklist';
 
@@ -28,18 +25,6 @@ export function RoutineAccessor() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-row gap-2 justify-stretch">
-        <Button variant="destructive" className="flex-1 text-destructive-foreground">
-          <ShieldAlert className="mr-2" /> Emergency Protocol
-        </Button>
-        <Button variant="accent1" className="flex-1">
-          <ToyBrick className="mr-2" /> Boredom Protocol
-        </Button>
-        <Button variant="accent2" className="flex-1">
-          <Route className="mr-2" /> Re-routing Protocol
-        </Button>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
         {/* Daily Workflows Column */}
         <div className="space-y-4">
