@@ -36,8 +36,10 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   const [lineHeight, setLineHeight] = useState(0);
 
   useEffect(() => {
-    if (containerRef.current && allSteps.length > 1) {
-      const items = containerRef.current.children;
+    if (containerRef.current && allSteps.length > 1 && !isSortable) {
+      const items = Array.from(containerRef.current.children).filter(
+        (child) => child.getAttribute('data-checklist-item') === 'true'
+      );
       if (items.length > 1) {
         const firstItem = items[0] as HTMLElement;
         const lastItem = items[items.length - 1] as HTMLElement;
@@ -53,7 +55,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
     } else {
         setLineHeight(0);
     }
-  }, [allSteps, containerRef]);
+  }, [allSteps, containerRef, isSortable]);
   
   const handleStepToggle = (toggledStepText: string) => {
     const stepToToggle = allSteps.find(s => s.text === toggledStepText);
@@ -89,7 +91,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   }
   
   const renderChecklistItem = (step: (Step & {routineId: string})) => (
-    <div className="flex items-center mb-4 last:mb-0 relative pl-10">
+    <div className="flex items-center mb-4 last:mb-0 relative pl-10" data-checklist-item="true">
       {isSortable && <GripVertical className="absolute left-0 text-muted-foreground/50" />}
       <button
         onClick={() => handleStepToggle(step.text)}
