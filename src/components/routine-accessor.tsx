@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/accordion';
 import { dailyWorkflows as initialDailyWorkflows } from '@/lib/data';
 import type { Routine, Step } from '@/lib/data';
-import { ListChecks, Moon, Plus, Sunrise, Users, Bot, Plane, Settings, KeyRound, Wrench } from 'lucide-react';
+import { ListChecks, Moon, Plus, Sunrise, Users, Bot, Plane, KeyRound } from 'lucide-react';
 import { RoutineChecklist } from './routine-checklist';
 import { KeyValueActivityPairs } from './key-value-activity-pairs';
 import { useState } from 'react';
