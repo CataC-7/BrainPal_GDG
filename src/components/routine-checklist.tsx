@@ -58,11 +58,19 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   }, [allSteps, containerRef, isSortable]);
   
   const handleStepToggle = (toggledStepText: string) => {
-    const stepToToggle = allSteps.find((s) => s.text === toggledStepText);
-    if (!stepToToggle) return;
+    let routineForStep: Routine | undefined;
+    let stepToToggle: Step | undefined;
 
-    const routineForStep = routines.find((r) => r.id === stepToToggle.routineId);
-    if (!routineForStep) return;
+    for (const routine of routines) {
+        const foundStep = routine.steps.find(s => s.text === toggledStepText);
+        if (foundStep) {
+            routineForStep = routine;
+            stepToToggle = foundStep;
+            break;
+        }
+    }
+
+    if (!routineForStep || !stepToToggle) return;
 
     const newRoutineSteps = routineForStep.steps.map((step) => {
       if (step.text === toggledStepText) {
@@ -70,7 +78,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
       }
       return step;
     });
-
+    
     onStepsUpdate(routineForStep.id, newRoutineSteps);
   };
 
@@ -140,7 +148,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   return (
     <Card className={cn(
       "transition-colors duration-300",
-      allCompleted && "bg-accent/40 border-accent"
+      allCompleted && allSteps.length > 0 && "bg-accent/40 border-accent"
     )}>
       <CardHeader>
         <CardTitle className="text-xl font-semibold flex items-center gap-2">
