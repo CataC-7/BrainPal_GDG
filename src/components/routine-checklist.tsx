@@ -60,19 +60,11 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   }, [allSteps, containerRef, isSortable]);
   
   const handleStepToggle = (toggledStepText: string) => {
-    let routineToUpdate: Routine | undefined;
-    let stepToUpdate: (Step & { routineId: string }) | undefined;
+    const routineToUpdate = routines.find(routine => 
+        routine.steps.some(s => s.text === toggledStepText)
+    );
 
-    for (const routine of routines) {
-        const foundStep = routine.steps.find(s => s.text === toggledStepText);
-        if (foundStep) {
-            routineToUpdate = routine;
-            stepToUpdate = { ...foundStep, routineId: routine.id };
-            break;
-        }
-    }
-
-    if (!routineToUpdate || !stepToUpdate) return;
+    if (!routineToUpdate) return;
   
     const newSteps = routineToUpdate.steps.map(step => {
       if (step.text === toggledStepText) {
@@ -167,7 +159,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
           )}
         </div>
         {onComplete && !isCompleted && (
-          <Button onClick={onComplete} size="sm">Complete</Button>
+          <Button onClick={onComplete} size="sm" variant="outline">Finish List</Button>
         )}
       </CardHeader>
       <CardContent>
