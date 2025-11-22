@@ -151,13 +151,13 @@ export function RoutineAccessor() {
             </CardHeader>
             <CardContent className="px-4 pb-4">
                 <div className="space-y-2 text-sm text-muted-foreground">
-                    <div className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
+                    <div className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 cursor-pointer">
                         <span>Family Visit Protocol</span>
                     </div>
-                    <div className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
+                    <div className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 cursor-pointer">
                         <span>Choice Overwhelm Protocol</span>
                     </div>
-                    <div className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
+                    <div className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 cursor-pointer">
                         <span>Travel Protocol</span>
                     </div>
                 </div>
