@@ -1,6 +1,5 @@
 import { RoutineAccessor } from '@/components/routine-accessor';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -18,9 +17,8 @@ export default function Home() {
         <div className="flex justify-center">
           <Card className="shadow-lg transition-shadow hover:shadow-xl w-full lg:w-3/4">
             <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-2xl font-semibold">
-                <BookOpen className="text-primary" />
-                Access Routines
+              <CardTitle className="text-2xl font-semibold">
+                Welcome Catalina, here's your plan for today
               </CardTitle>
             </CardHeader>
             <CardContent>
