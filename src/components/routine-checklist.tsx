@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { Check, Circle, PlusCircle, X } from 'lucide-react';
 import type { Routine, Step } from '@/lib/data';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import type {PointerEvent as ReactPointerEvent} from 'react';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { SortableItem } from './sortable-item';
 import { Input } from './ui/input';
@@ -25,6 +26,38 @@ interface RoutineChecklistProps {
   isEditing?: boolean;
 }
 
+function shouldHandleEvent(element: HTMLElement | null) {
+  let cur = element;
+
+  while (cur) {
+    if (cur.dataset && cur.dataset.noDnd) {
+      return false;
+    }
+    cur = cur.parentElement;
+  }
+
+  return true;
+}
+
+class CustomPointerSensor extends PointerSensor {
+    static activators = [
+        {
+            eventName: 'onPointerDown' as const,
+            handler: ({ nativeEvent: event }: { nativeEvent: PointerEvent | ReactPointerEvent}) => {
+                if (
+                    !event.isPrimary ||
+                    event.button !== 0 ||
+                    !shouldHandleEvent(event.target as HTMLElement)
+                ) {
+                    return false;
+                }
+                return true;
+            },
+        },
+    ];
+}
+
+
 export function RoutineChecklist({ 
     title, 
     icon, 
@@ -42,7 +75,7 @@ export function RoutineChecklist({
   const [newActivity, setNewActivity] = useState('');
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(CustomPointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -101,8 +134,7 @@ export function RoutineChecklist({
     }
   }
 
-  const handleDeleteStep = (e: React.MouseEvent, stepTextToDelete: string) => {
-    e.stopPropagation();
+  const handleDeleteStep = (stepTextToDelete: string) => {
     const routineToUpdate = routines.find(routine => 
       routine.steps.some(s => s.text === stepTextToDelete)
     );
@@ -150,7 +182,7 @@ export function RoutineChecklist({
         )}
       </span>
       {canDeleteItems && (
-        <div role="button" className="flex items-center justify-center w-6 h-6 rounded-full text-destructive/50 hover:text-destructive hover:bg-destructive/10 cursor-pointer" onClick={(e) => handleDeleteStep(e, step.text)}>
+        <div role="button" data-no-dnd="true" className="flex items-center justify-center w-6 h-6 rounded-full text-destructive/50 hover:text-destructive hover:bg-destructive/10 cursor-pointer" onClick={() => handleDeleteStep(step.text)}>
             <X className="w-4 h-4" />
         </div>
       )}
