@@ -223,7 +223,7 @@ export function RoutineChecklist({
           )}
         </div>
         {onComplete && !isCompleted && !isEditing && title === "Today's Flow" && (
-          <Button onClick={onComplete} size="sm" variant="outline">Finish List</Button>
+          <Button onClick={onComplete} size="sm" variant="outline">Finish Editing</Button>
         )}
          {isEditing && onComplete && (
           <Button onClick={onComplete} size="sm" variant="outline">Finish Editing</Button>
