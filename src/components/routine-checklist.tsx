@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { Check, Circle } from 'lucide-react';
@@ -15,6 +15,30 @@ interface RoutineChecklistProps {
 export function RoutineChecklist({ title, icon, routines }: RoutineChecklistProps) {
   const initialSteps = useMemo(() => routines.flatMap(r => r.steps), [routines]);
   const [steps, setSteps] = useState<Step[]>(initialSteps);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [lineHeight, setLineHeight] = useState(0);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const items = containerRef.current.children;
+      if (items.length > 1) {
+        const firstItem = items[0] as HTMLDivElement;
+        const lastItem = items[items.length - 1] as HTMLDivElement;
+        const firstCircle = firstItem.querySelector('button');
+        const lastCircle = lastItem.querySelector('button');
+        if (firstCircle && lastCircle) {
+           const firstRect = firstCircle.getBoundingClientRect();
+           const lastRect = lastCircle.getBoundingClientRect();
+           const containerRect = containerRef.current.getBoundingClientRect();
+           const height = lastRect.top - firstRect.top;
+           setLineHeight(height);
+        }
+      } else {
+        setLineHeight(0);
+      }
+    }
+  }, [steps]);
+
 
   const handleStepToggle = (index: number) => {
     const newSteps = [...steps];
@@ -40,14 +64,23 @@ export function RoutineChecklist({ title, icon, routines }: RoutineChecklistProp
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="relative pl-6">
+        <div ref={containerRef} className="relative pl-6">
+           {steps.length > 1 && (
+            <div
+                className="absolute left-[3px] w-px bg-border -translate-x-1/2"
+                style={{ 
+                    top: '12px', // half of the circle height
+                    height: `${lineHeight}px` 
+                }}
+            ></div>
+           )}
           {steps.map((step, index) => (
-            <div key={index} className="flex items-center mb-4 last:mb-0">
-              <div className="absolute left-[3px] w-px h-full bg-border -translate-x-1/2"></div>
+            <div key={index} className="flex items-center mb-4 last:mb-0 relative">
               <button
                 onClick={() => handleStepToggle(index)}
                 className={cn(
-                  "absolute left-[3px] -translate-x-1/2 flex items-center justify-center w-6 h-6 rounded-full border-2 transition-colors",
+                  "flex items-center justify-center w-6 h-6 rounded-full border-2 transition-colors z-10",
+                  "absolute left-[3px] -translate-x-1/2",
                   step.completed
                     ? "bg-accent border-accent-foreground/50"
                     : "bg-background border-border hover:border-primary"
