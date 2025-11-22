@@ -31,14 +31,14 @@ export function RoutineAccessor() {
 
   return (
     <div className="space-y-4">
-       <div className="flex flex-col sm:flex-row gap-2 justify-stretch">
+       <div className="flex flex-row gap-2 justify-stretch">
         <Button variant="destructive" className="flex-1">
           <ShieldAlert className="mr-2" /> Emergency Protocol
         </Button>
-        <Button variant="outline" className="flex-1">
+        <Button variant="accent1" className="flex-1">
           <ToyBrick className="mr-2" /> Boredom Protocol
         </Button>
-        <Button variant="outline" className="flex-1">
+        <Button variant="accent2" className="flex-1">
           <Route className="mr-2" /> Re-routing Protocol
         </Button>
       </div>
