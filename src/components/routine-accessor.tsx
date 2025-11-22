@@ -25,7 +25,7 @@ export function RoutineAccessor() {
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
         {/* Daily Workflows Column */}
         <div className="space-y-4">
           <RoutineChecklist
