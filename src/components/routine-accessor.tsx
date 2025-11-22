@@ -215,10 +215,25 @@ export function RoutineAccessor() {
             </CardHeader>
             <CardContent className="px-4 pb-4">
                 <div className="text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
-                        <Sunrise className="w-4 h-4" />
-                        <span>Modify Morning Routine</span>
-                    </div>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
+                            <Sunrise className="w-4 h-4" />
+                            <span>Modify Morning Routine</span>
+                        </div>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Feature in Development</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This feature is still in development - once shipped, you will be able to customise your morning routine by adding/removing items. Once done, you will see the updated routine statically in your screen
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogAction>Got it!</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                     <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
                         <Moon className="w-4 h-4" />
                         <span>Modify Night Routine</span>
