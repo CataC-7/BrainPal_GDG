@@ -141,7 +141,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   return (
     <Card className={cn(
       "transition-colors duration-300",
-      (allCompleted || isCompleted) && allSteps.length > 0 && "bg-accent/40 border-accent"
+      allCompleted && allSteps.length > 0 && "bg-accent/40 border-accent"
     )}>
       <CardHeader className="flex-row items-start justify-between">
         <div>
