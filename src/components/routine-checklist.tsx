@@ -19,24 +19,28 @@ export function RoutineChecklist({ title, icon, routines }: RoutineChecklistProp
   const [lineHeight, setLineHeight] = useState(0);
 
   useEffect(() => {
-    if (containerRef.current) {
-      const items = containerRef.current.children;
-      if (items.length > 1) {
-        const firstItem = items[0] as HTMLDivElement;
-        const lastItem = items[items.length - 1] as HTMLDivElement;
-        const firstCircle = firstItem.querySelector('button');
-        const lastCircle = lastItem.querySelector('button');
-        if (firstCircle && lastCircle) {
-           const firstRect = firstCircle.getBoundingClientRect();
-           const lastRect = lastCircle.getBoundingClientRect();
-           const containerRect = containerRef.current.getBoundingClientRect();
-           const height = lastRect.top - firstRect.top;
-           setLineHeight(height);
+    // A timeout is used to ensure all elements are rendered before we calculate the height.
+    const timer = setTimeout(() => {
+      if (containerRef.current) {
+        const items = containerRef.current.children;
+        if (items.length > 1) {
+          const firstItem = items[0] as HTMLDivElement;
+          const lastItem = items[items.length - 1] as HTMLDivElement;
+          const firstCircle = firstItem.querySelector('button');
+          const lastCircle = lastItem.querySelector('button');
+          if (firstCircle && lastCircle) {
+             const firstRect = firstCircle.getBoundingClientRect();
+             const lastRect = lastCircle.getBoundingClientRect();
+             const height = lastRect.top - firstRect.top;
+             setLineHeight(height);
+          }
+        } else {
+          setLineHeight(0);
         }
-      } else {
-        setLineHeight(0);
       }
-    }
+    }, 0);
+  
+    return () => clearTimeout(timer);
   }, [steps]);
 
 
@@ -64,10 +68,10 @@ export function RoutineChecklist({ title, icon, routines }: RoutineChecklistProp
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div ref={containerRef} className="relative pl-6">
+        <div ref={containerRef} className="relative">
            {steps.length > 1 && (
             <div
-                className="absolute left-[3px] w-px bg-border -translate-x-1/2"
+                className="absolute left-[12px] w-px bg-border -translate-x-1/2"
                 style={{ 
                     top: '12px', // half of the circle height
                     height: `${lineHeight}px` 
@@ -75,12 +79,12 @@ export function RoutineChecklist({ title, icon, routines }: RoutineChecklistProp
             ></div>
            )}
           {steps.map((step, index) => (
-            <div key={index} className="flex items-center mb-4 last:mb-0 relative">
+            <div key={index} className="flex items-center mb-4 last:mb-0 relative pl-10">
               <button
                 onClick={() => handleStepToggle(index)}
                 className={cn(
                   "flex items-center justify-center w-6 h-6 rounded-full border-2 transition-colors z-10",
-                  "absolute left-[3px] -translate-x-1/2",
+                  "absolute left-[0px]",
                   step.completed
                     ? "bg-accent border-accent-foreground/50"
                     : "bg-background border-border hover:border-primary"
@@ -94,7 +98,7 @@ export function RoutineChecklist({ title, icon, routines }: RoutineChecklistProp
               </button>
               <span
                 className={cn(
-                  "ml-6 text-muted-foreground transition-opacity",
+                  "text-muted-foreground transition-opacity",
                   step.completed && "opacity-50 line-through"
                 )}
               >
