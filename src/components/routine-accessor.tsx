@@ -1,15 +1,21 @@
+"use client";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { dailyWorkflows, protocols } from '@/lib/data';
+import { dailyWorkflows as initialDailyWorkflows, protocols } from '@/lib/data';
+import type { Routine, Step } from '@/lib/data';
 import { ListChecks, Moon, Sunrise } from 'lucide-react';
 import { RoutineChecklist } from './routine-checklist';
 import { KeyValueActivityPairs } from './key-value-activity-pairs';
+import { useState } from 'react';
 
 export function RoutineAccessor() {
+  const [dailyWorkflows, setDailyWorkflows] = useState<Routine[]>(initialDailyWorkflows);
+
   const morningRoutines = dailyWorkflows.filter(
     (r) => r.category === 'morning'
   );
@@ -24,6 +30,39 @@ export function RoutineAccessor() {
     (p) => p.category === 'rerouting'
   );
 
+  const handleActivityChange = (activityKey: string, value: string) => {
+    const activityName = activityKey.charAt(0).toUpperCase() + activityKey.slice(1).replace(/([A-Z])/g, ' $1');
+    
+    setDailyWorkflows(prevWorkflows => {
+      return prevWorkflows.map(workflow => {
+        if (workflow.category === 'morning' || workflow.category === 'night') {
+          const newSteps = workflow.steps.map(step => {
+            if (step.text.startsWith(activityName)) {
+              if(value) {
+                return { ...step, text: `${activityName}: ${value}` };
+              }
+              return { ...step, text: activityName };
+            }
+            return step;
+          });
+          return { ...workflow, steps: newSteps };
+        }
+        return workflow;
+      });
+    });
+  };
+
+  const handleStepsUpdate = (routineId: string, newSteps: Step[]) => {
+    setDailyWorkflows(prevWorkflows => {
+      return prevWorkflows.map(workflow => {
+        if (workflow.id === routineId) {
+          return { ...workflow, steps: newSteps };
+        }
+        return workflow;
+      });
+    });
+  };
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -33,22 +72,25 @@ export function RoutineAccessor() {
             title="Morning Routine"
             icon={<Sunrise className="text-primary" />}
             routines={morningRoutines}
+            onStepsUpdate={handleStepsUpdate}
           />
           <RoutineChecklist
             title="Today's Flow"
             icon={<ListChecks className="text-primary" />}
             routines={flowRoutines}
+            onStepsUpdate={handleStepsUpdate}
           />
           <RoutineChecklist
             title="Night Routine"
             icon={<Moon className="text-primary" />}
             routines={nightRoutines}
+            onStepsUpdate={handleStepsUpdate}
           />
         </div>
 
         {/* Protocols Column */}
         <div className="space-y-4">
-          <KeyValueActivityPairs />
+          <KeyValueActivityPairs onActivityChange={handleActivityChange} />
           <Accordion type="single" collapsible className="w-full space-y-4">
             <AccordionItem
               value="emergency-protocol"

@@ -10,11 +10,12 @@ interface RoutineChecklistProps {
   title: string;
   icon: React.ReactNode;
   routines: Routine[];
+  onStepsUpdate: (routineId: string, steps: Step[]) => void;
 }
 
-export function RoutineChecklist({ title, icon, routines }: RoutineChecklistProps) {
-  const initialSteps = useMemo(() => routines.flatMap(r => r.steps), [routines]);
-  const [steps, setSteps] = useState<Step[]>(initialSteps);
+export function RoutineChecklist({ title, icon, routines, onStepsUpdate }: RoutineChecklistProps) {
+  const allSteps = useMemo(() => routines.flatMap(r => r.steps.map(s => ({...s, routineId: r.id}))), [routines]);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const [lineHeight, setLineHeight] = useState(0);
 
@@ -42,18 +43,28 @@ export function RoutineChecklist({ title, icon, routines }: RoutineChecklistProp
     }, 50); // Increased timeout slightly for stability
   
     return () => clearTimeout(timer);
-  }, [steps]);
+  }, [allSteps]);
 
 
-  const handleStepToggle = (index: number) => {
-    const newSteps = [...steps];
-    newSteps[index].completed = !newSteps[index].completed;
-    setSteps(newSteps);
+  const handleStepToggle = (toggledStepIndex: number) => {
+    const newStepsForRoutine = [...allSteps];
+    const toggledStep = newStepsForRoutine[toggledStepIndex];
+    
+    // Find all steps for the specific routine
+    const routineSteps = routines.find(r => r.id === toggledStep.routineId)?.steps || [];
+    const newRoutineSteps = routineSteps.map(step => {
+        if(step.text === toggledStep.text) {
+            return {...step, completed: !step.completed};
+        }
+        return step;
+    });
+
+    onStepsUpdate(toggledStep.routineId, newRoutineSteps);
   };
 
-  const allCompleted = useMemo(() => steps.every(step => step.completed), [steps]);
+  const allCompleted = useMemo(() => allSteps.every(step => step.completed), [allSteps]);
 
-  if (steps.length === 0) {
+  if (allSteps.length === 0) {
     return null;
   }
 
@@ -79,7 +90,7 @@ export function RoutineChecklist({ title, icon, routines }: RoutineChecklistProp
                 }}
             ></div>
            )}
-          {steps.map((step, index) => (
+          {allSteps.map((step, index) => (
             <div key={index} className="flex items-center mb-4 last:mb-0 relative pl-10">
               <button
                 onClick={() => handleStepToggle(index)}

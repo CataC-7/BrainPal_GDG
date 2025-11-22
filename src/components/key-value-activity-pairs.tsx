@@ -23,16 +23,21 @@ import { activityOptions } from "@/lib/data"
 interface ComboboxProps {
   options: { value: string; label: string }[];
   defaultLabel: string;
+  activityKey: string;
+  onActivityChange: (activityKey: string, value: string) => void;
 }
 
-function Combobox({ options, defaultLabel }: ComboboxProps) {
+function Combobox({ options, defaultLabel, activityKey, onActivityChange }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState("")
   const [customOptions, setCustomOptions] = React.useState(options);
   const [inputValue, setInputValue] = React.useState('');
 
   const handleSelect = (currentValue: string) => {
-    setValue(currentValue === value ? "" : currentValue)
+    const selectedValue = currentValue === value ? "" : currentValue;
+    setValue(selectedValue);
+    const selectedOption = customOptions.find((option) => option.value === selectedValue);
+    onActivityChange(activityKey, selectedOption ? selectedOption.label : '');
     setOpen(false)
   }
 
@@ -50,6 +55,7 @@ function Combobox({ options, defaultLabel }: ComboboxProps) {
         setCustomOptions([...customOptions, newOption]);
       }
       setValue(newOption.value);
+      onActivityChange(activityKey, newOption.label);
       setOpen(false);
       setInputValue('');
     }
@@ -106,7 +112,11 @@ function Combobox({ options, defaultLabel }: ComboboxProps) {
   )
 }
 
-export function KeyValueActivityPairs() {
+interface KeyValueActivityPairsProps {
+    onActivityChange: (activityKey: string, value: string) => void;
+}
+
+export function KeyValueActivityPairs({ onActivityChange }: KeyValueActivityPairsProps) {
     return (
         <Card className="border bg-card rounded-md">
             <CardHeader className="px-4 pt-4 pb-2">
@@ -116,15 +126,15 @@ export function KeyValueActivityPairs() {
                 <div className="space-y-2 text-sm text-muted-foreground">
                     <div className="flex items-center justify-between">
                         <span>Meditation</span>
-                        <Combobox options={activityOptions.meditation} defaultLabel="Select type..."/>
+                        <Combobox options={activityOptions.meditation} defaultLabel="Select type..." activityKey="meditation" onActivityChange={onActivityChange} />
                     </div>
                     <div className="flex items-center justify-between">
                         <span>Movement</span>
-                        <Combobox options={activityOptions.movement} defaultLabel="Select type..."/>
+                        <Combobox options={activityOptions.movement} defaultLabel="Select type..." activityKey="movement" onActivityChange={onActivityChange} />
                     </div>
                     <div className="flex items-center justify-between">
                         <span>Online Learning</span>
-                        <Combobox options={activityOptions.onlineLearning} defaultLabel="Select type..."/>
+                        <Combobox options={activityOptions.onlineLearning} defaultLabel="Select type..." activityKey="onlineLearning" onActivityChange={onActivityChange} />
                     </div>
                 </div>
             </CardContent>
