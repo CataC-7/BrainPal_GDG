@@ -91,7 +91,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   }
   
   const renderChecklistItem = (step: (Step & {routineId: string})) => (
-    <div className="flex items-center mb-4 last:mb-0 relative pl-12" data-checklist-item="true">
+    <div className="flex items-center mb-2 last:mb-0 relative pl-12" data-checklist-item="true">
       {isSortable && <GripVertical className="absolute left-0 text-muted-foreground/50" />}
       <button
         onClick={() => handleStepToggle(step.text)}
