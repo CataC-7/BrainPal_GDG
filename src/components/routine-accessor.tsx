@@ -253,10 +253,25 @@ export function RoutineAccessor() {
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
-                    <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
-                        <KeyRound className="w-4 h-4" />
-                        <span>Modify Key:Value Activity Pairs</span>
-                    </div>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
+                            <KeyRound className="w-4 h-4" />
+                            <span>Modify Key:Value Activity Pairs</span>
+                        </div>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Feature in Development</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This feature is still in development - once shipped, you will be able to customise your Key:Value Activity Pairs section by adding/removing activities and default options.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogAction>Got it!</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                 </div>
             </CardContent>
           </Card>
