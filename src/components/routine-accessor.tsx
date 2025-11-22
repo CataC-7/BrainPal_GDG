@@ -1,26 +1,32 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import { dailyWorkflows as initialDailyWorkflows } from '@/lib/data';
 import type { Routine, Step } from '@/lib/data';
 import { ListChecks, Moon, Plus, Sunrise, Users, Bot, Plane, KeyRound } from 'lucide-react';
 import { RoutineChecklist } from './routine-checklist';
 import { KeyValueActivityPairs } from './key-value-activity-pairs';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { arrayMove } from '@dnd-kit/sortable';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
+import { CompletionCelebration } from './completion-celebration';
 
 export function RoutineAccessor() {
   const [dailyWorkflows, setDailyWorkflows] = useState<Routine[]>(initialDailyWorkflows);
   const { toast } = useToast();
   const [isFlowCompleted, setIsFlowCompleted] = useState(false);
+  const [allTasksCompleted, setAllTasksCompleted] = useState(false);
+
+  useEffect(() => {
+    const allSteps = dailyWorkflows.flatMap(r => r.steps);
+    const areAllCompleted = allSteps.length > 0 && allSteps.every(step => step.completed);
+    if (areAllCompleted) {
+      setAllTasksCompleted(true);
+    } else {
+      setAllTasksCompleted(false);
+    }
+  }, [dailyWorkflows]);
 
   const morningRoutines = dailyWorkflows.filter(
     (r) => r.category === 'morning'
@@ -118,9 +124,9 @@ export function RoutineAccessor() {
     setIsFlowCompleted(true);
   }
 
-
   return (
     <div className="space-y-4">
+       {allTasksCompleted && <CompletionCelebration />}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Daily Workflows Column */}
         <div className="space-y-4">
