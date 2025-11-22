@@ -39,7 +39,6 @@ export const dailyWorkflows: Routine[] = [
     title: 'Night Routine',
     steps: [
       { text: 'Friend Replies', completed: false },
-      { text: 'Physio', completed: false },
       { text: 'Journal', completed: false },
       { text: 'Mobility', completed: false },
       { text: 'Go to Sleep', completed: false },
