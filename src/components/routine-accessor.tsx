@@ -58,7 +58,6 @@ export function RoutineAccessor() {
         description: "Maximum of 3 non-negotiables is allowed.",
         variant: "destructive",
       });
-      // Trim the tasks to the first 3 if more are entered.
       tasks.length = 3;
     }
   
@@ -68,15 +67,13 @@ export function RoutineAccessor() {
       return prevWorkflows.map(workflow => {
         if (workflow.id === 'dwf-flow') {
           // Keep existing activities that are not non-negotiables
-          const existingActivities = workflow.steps.filter(step => !step.text.startsWith('*'));
+          const existingSteps = workflow.steps.filter(step => !step.text.startsWith('*'));
           
           if (value.trim() === '') {
-            // If input is empty, only keep existing activities
-            return { ...workflow, steps: existingActivities };
+            return { ...workflow, steps: existingSteps };
           }
           
-          // Add new non-negotiables to the existing activities
-          return { ...workflow, steps: [...existingActivities, ...newSteps] };
+          return { ...workflow, steps: [...existingSteps, ...newSteps] };
         }
         return workflow;
       });
