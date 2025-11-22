@@ -149,9 +149,9 @@ export function RoutineChecklist({
         )}
       </span>
       {canDeleteItems && (
-        <Button variant="ghost" size="icon" className="w-6 h-6 rounded-full text-destructive/50 hover:text-destructive hover:bg-destructive/10" onClick={() => handleDeleteStep(step.text)}>
+        <div role="button" className="flex items-center justify-center w-6 h-6 rounded-full text-destructive/50 hover:text-destructive hover:bg-destructive/10 cursor-pointer" onClick={() => handleDeleteStep(step.text)}>
             <X className="w-4 h-4" />
-        </Button>
+        </div>
       )}
     </div>
   );
