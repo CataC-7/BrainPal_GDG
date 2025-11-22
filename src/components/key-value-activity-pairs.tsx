@@ -62,6 +62,7 @@ function Combobox({ options, defaultLabel }: ComboboxProps) {
         <Button
           variant="outline"
           role="combobox"
+          size="sm"
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
@@ -107,7 +108,7 @@ function Combobox({ options, defaultLabel }: ComboboxProps) {
 
 export function KeyValueActivityPairs() {
     return (
-        <Card className="border bg-card rounded-md">
+        <Card className="border bg-muted/30 rounded-md">
             <CardHeader className="px-4 pt-4 pb-2">
                 <CardTitle className="text-left font-semibold text-base">Key:Value Activity Pairs</CardTitle>
             </CardHeader>
