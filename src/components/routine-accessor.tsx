@@ -116,15 +116,6 @@ export function RoutineAccessor() {
 
   const handleCompleteFlow = () => {
     setIsFlowCompleted(true);
-    setDailyWorkflows(prevWorkflows => {
-      return prevWorkflows.map(workflow => {
-        if (workflow.id === 'dwf-flow') {
-          const completedSteps = workflow.steps.map(step => ({...step, completed: true}));
-          return {...workflow, steps: completedSteps};
-        }
-        return workflow;
-      })
-    })
   }
 
 
