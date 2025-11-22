@@ -12,7 +12,7 @@ export default function Home() {
           🧠BrainPal
           </h1>
           <p className="text-muted-foreground mt-2 text-lg">
-            Access Your Daily Support Needs in Your Pocket
+            Support yourself when it matters the most 
           </p>
         </header>
 

@@ -2,6 +2,7 @@ export type Routine = {
   id: string;
   title: string;
   steps: string[];
+  category: 'morning' | 'flow' | 'night' | 'emergency';
 };
 
 export const dailyWorkflows: Routine[] = [
@@ -14,9 +15,16 @@ export const dailyWorkflows: Routine[] = [
       'Prepare chemical solutions',
       'Review daily experiment schedule',
     ],
+    category: 'morning',
   },
   {
     id: 'dwf-2',
+    title: 'Daily Experiment Workflow',
+    steps: ['Follow protocol for experiment #123', 'Record results every 30 minutes'],
+    category: 'flow',
+  },
+  {
+    id: 'dwf-3',
     title: 'End of Day Shutdown',
     steps: [
       'Safely store all samples',
@@ -24,6 +32,7 @@ export const dailyWorkflows: Routine[] = [
       'Shut down non-essential equipment',
       'Log daily progress and findings',
     ],
+    category: 'night',
   },
 ];
 
@@ -38,6 +47,7 @@ export const emergencyInterventions: Routine[] = [
       'Ventilate the area if safe to do so',
       'Contact safety officer',
     ],
+    category: 'emergency',
   },
   {
     id: 'e-2',
@@ -48,5 +58,6 @@ export const emergencyInterventions: Routine[] = [
       'Unplug sensitive electronics',
       'Await instructions from facility manager',
     ],
+    category: 'emergency',
   },
 ];
