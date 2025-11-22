@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RoutineAccessor } from '@/components/routine-accessor';
+import { EmergencyProtocolDialog } from '@/components/emergency-protocol-dialog';
 import { AlertTriangle, ToyBrick, Route } from 'lucide-react';
 
 export default function Home() {
@@ -15,10 +16,12 @@ export default function Home() {
             Support yourself when it matters the most
           </p>
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
-            <Button variant="destructive">
-              <AlertTriangle />
-              Emergency Protocol
-            </Button>
+            <EmergencyProtocolDialog>
+              <Button variant="destructive">
+                <AlertTriangle />
+                Emergency Protocol
+              </Button>
+            </EmergencyProtocolDialog>
             <Button variant="accent1">
               <ToyBrick />
               Boredom Protocol
