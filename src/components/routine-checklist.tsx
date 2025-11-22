@@ -91,7 +91,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   }
   
   const renderChecklistItem = (step: (Step & {routineId: string})) => (
-    <div className="flex items-center mb-4 last:mb-0 relative pl-10" data-checklist-item="true">
+    <div className="flex items-center mb-4 last:mb-0 relative pl-12" data-checklist-item="true">
       {isSortable && <GripVertical className="absolute left-0 text-muted-foreground/50" />}
       <button
         onClick={() => handleStepToggle(step.text)}
@@ -158,7 +158,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
             </DndContext>
         ) : checklistContent}
         {canAddTasks && (
-            <div className="flex items-center gap-2 mt-4 pl-10 relative">
+            <div className="flex items-center gap-2 mt-4 pl-12 relative">
                  <PlusCircle className="w-6 h-6 absolute left-6 transform -translate-x-1/2 text-muted-foreground/50 top-1/2 -translate-y-1/2" />
                  <Input 
                     placeholder="Add new activity..."
