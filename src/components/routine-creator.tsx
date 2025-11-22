@@ -17,13 +17,13 @@ import { useState } from "react";
 export function RoutineCreator() {
   const [dailyTitle, setDailyTitle] = useState("");
   const [dailySteps, setDailySteps] = useState("");
-  const [emergencyTitle, setEmergencyTitle] = useState("");
-  const [emergencySteps, setEmergencySteps] = useState("");
+  const [protocolTitle, setProtocolTitle] = useState("");
+  const [protocolSteps, setProtocolSteps] = useState("");
 
   const [isDailySaved, setIsDailySaved] = useState(false);
-  const [isEmergencySaved, setIsEmergencySaved] = useState(false);
+  const [isProtocolSaved, setIsProtocolSaved] = useState(false);
 
-  const handleSave = (type: "daily" | "emergency") => {
+  const handleSave = (type: "daily" | "protocol") => {
     if (type === "daily") {
       if (!dailyTitle || !dailySteps) return;
       setIsDailySaved(true);
@@ -33,12 +33,12 @@ export function RoutineCreator() {
         setDailySteps("");
       }, 2000);
     } else {
-      if (!emergencyTitle || !emergencySteps) return;
-      setIsEmergencySaved(true);
+      if (!protocolTitle || !protocolSteps) return;
+      setIsProtocolSaved(true);
       setTimeout(() => {
-        setIsEmergencySaved(false);
-        setEmergencyTitle("");
-        setEmergencySteps("");
+        setIsProtocolSaved(false);
+        setProtocolTitle("");
+        setProtocolSteps("");
       }, 2000);
     }
   };
@@ -50,9 +50,9 @@ export function RoutineCreator() {
           <ClipboardList className="h-4 w-4" />
           Daily Workflow
         </TabsTrigger>
-        <TabsTrigger value="emergency" className="gap-2">
+        <TabsTrigger value="protocol" className="gap-2">
           <Siren className="h-4 w-4" />
-          Emergency Intervention
+          Protocol
         </TabsTrigger>
       </TabsList>
       <TabsContent value="daily">
@@ -96,45 +96,45 @@ export function RoutineCreator() {
           </Button>
         </div>
       </TabsContent>
-      <TabsContent value="emergency">
+      <TabsContent value="protocol">
         <div className="space-y-4 pt-4">
           <div className="space-y-2">
-            <Label htmlFor="emergency-title">Intervention Title</Label>
+            <Label htmlFor="protocol-title">Protocol Title</Label>
             <Input
-              id="emergency-title"
-              placeholder="e.g., Patient in Distress"
-              value={emergencyTitle}
-              onChange={(e) => setEmergencyTitle(e.target.value)}
-              disabled={isEmergencySaved}
+              id="protocol-title"
+              placeholder="e.g., Emergency Protocol"
+              value={protocolTitle}
+              onChange={(e) => setProtocolTitle(e.target.value)}
+              disabled={isProtocolSaved}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="emergency-steps">Procedure</Label>
+            <Label htmlFor="protocol-steps">Procedure</Label>
             <Textarea
-              id="emergency-steps"
+              id="protocol-steps"
               placeholder="1. Press the emergency button&#10;2. Call for help&#10;3. ..."
               className="min-h-[150px]"
-              value={emergencySteps}
-              onChange={(e) => setEmergencySteps(e.target.value)}
-              disabled={isEmergencySaved}
+              value={protocolSteps}
+              onChange={(e) => setProtocolSteps(e.target.value)}
+              disabled={isProtocolSaved}
             />
           </div>
           <Button
-            variant={isEmergencySaved ? "default" : "destructive"}
+            variant={isProtocolSaved ? "default" : "destructive"}
             className={cn(
               "w-full transition-colors",
-              isEmergencySaved &&
+              isProtocolSaved &&
                 "bg-accent hover:bg-accent text-accent-foreground border-accent"
             )}
-            onClick={() => handleSave("emergency")}
-            disabled={isEmergencySaved || (!emergencyTitle || !emergencySteps)}
+            onClick={() => handleSave("protocol")}
+            disabled={isProtocolSaved || (!protocolTitle || !protocolSteps)}
           >
-            {isEmergencySaved ? (
+            {isProtocolSaved ? (
               <span className="flex items-center">
                 <CheckCircle className="mr-2 h-4 w-4" /> Saved!
               </span>
             ) : (
-              "Save Intervention"
+              "Save Protocol"
             )}
           </Button>
         </div>

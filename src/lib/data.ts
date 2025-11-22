@@ -2,62 +2,53 @@ export type Routine = {
   id: string;
   title: string;
   steps: string[];
-  category: 'morning' | 'flow' | 'night' | 'emergency';
+  category:
+    | 'morning'
+    | 'flow'
+    | 'night'
+    | 'emergency'
+    | 'boredom'
+    | 'rerouting';
 };
 
 export const dailyWorkflows: Routine[] = [
   {
-    id: 'dwf-1',
-    title: 'Morning Lab Prep',
-    steps: [
-      'Disinfect all surfaces',
-      'Calibrate measurement tools',
-      'Prepare chemical solutions',
-      'Review daily experiment schedule',
-    ],
+    id: 'dwf-morning',
+    title: 'Morning Routine',
+    steps: ['This is your morning routine. Edit it to make it your own.'],
     category: 'morning',
   },
   {
-    id: 'dwf-2',
-    title: 'Daily Experiment Workflow',
-    steps: ['Follow protocol for experiment #123', 'Record results every 30 minutes'],
+    id: 'dwf-flow',
+    title: "Today's Flow",
+    steps: ["This is your day's flow. Edit it to make it your own."],
     category: 'flow',
   },
   {
-    id: 'dwf-3',
-    title: 'End of Day Shutdown',
-    steps: [
-      'Safely store all samples',
-      'Clean glassware',
-      'Shut down non-essential equipment',
-      'Log daily progress and findings',
-    ],
+    id: 'dwf-night',
+    title: 'Night Routine',
+    steps: ['This is your night routine. Edit it to make it your own.'],
     category: 'night',
   },
 ];
 
-export const emergencyInterventions: Routine[] = [
+export const protocols: Routine[] = [
   {
-    id: 'e-1',
-    title: 'Chemical Spill',
-    steps: [
-      'Alert everyone in the immediate area',
-      'Contain the spill with absorbent material',
-      'Refer to MSDS for specific cleanup instructions',
-      'Ventilate the area if safe to do so',
-      'Contact safety officer',
-    ],
+    id: 'p-emergency',
+    title: 'Emergency Protocol',
+    steps: ['This is your emergency protocol. Edit it to make it your own.'],
     category: 'emergency',
   },
   {
-    id: 'e-2',
-    title: 'Power Outage',
-    steps: [
-      'Ensure all critical experiments are safely paused or terminated',
-      'Switch to backup power for essential equipment (e.g., freezers)',
-      'Unplug sensitive electronics',
-      'Await instructions from facility manager',
-    ],
-    category: 'emergency',
+    id: 'p-boredom',
+    title: 'Boredom Protocol',
+    steps: ['This is your boredom protocol. Edit it to make it your own.'],
+    category: 'boredom',
+  },
+  {
+    id: 'p-rerouting',
+    title: 'Re-routing Protocol',
+    steps: ['This is your re-routing protocol. Edit it to make it your own.'],
+    category: 'rerouting',
   },
 ];
