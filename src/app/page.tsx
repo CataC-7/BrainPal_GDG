@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RoutineAccessor } from '@/components/routine-accessor';
 
@@ -12,6 +13,11 @@ export default function Home() {
           <p className="text-muted-foreground mt-2 text-lg">
             Support yourself when it matters the most
           </p>
+          <div className="mt-6 flex justify-center gap-4">
+            <Button variant="accent1">Emergency Protocol</Button>
+            <Button variant="accent2">Boredom Protocol</Button>
+            <Button variant="outline">Re-routing Protocol</Button>
+          </div>
         </header>
 
         <div className="flex flex-col items-center">
