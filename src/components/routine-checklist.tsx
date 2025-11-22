@@ -57,29 +57,18 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
     }
   }, [allSteps, containerRef, isSortable]);
   
-  const handleStepToggle = (toggledStepText: string) => {
-    let routineForStep: Routine | undefined;
-    let stepToToggle: Step | undefined;
+  const handleStepToggle = (toggledStepText: string, routineId: string) => {
+    const routine = routines.find(r => r.id === routineId);
+    if (!routine) return;
 
-    for (const routine of routines) {
-        const foundStep = routine.steps.find(s => s.text === toggledStepText);
-        if (foundStep) {
-            routineForStep = routine;
-            stepToToggle = foundStep;
-            break;
-        }
-    }
-
-    if (!routineForStep || !stepToToggle) return;
-
-    const newRoutineSteps = routineForStep.steps.map((step) => {
+    const newSteps = routine.steps.map(step => {
       if (step.text === toggledStepText) {
         return { ...step, completed: !step.completed };
       }
       return step;
     });
-    
-    onStepsUpdate(routineForStep.id, newRoutineSteps);
+
+    onStepsUpdate(routineId, newSteps);
   };
 
   const handleAddNewActivity = () => {
@@ -101,7 +90,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   const renderChecklistItem = (step: (Step & {routineId: string})) => (
     <div className="flex items-center relative pl-12" data-checklist-item="true">
       <button
-        onClick={() => handleStepToggle(step.text)}
+        onClick={() => handleStepToggle(step.text, step.routineId)}
         className={cn(
           "flex items-center justify-center w-6 h-6 rounded-full border-2 transition-colors z-10",
           "absolute left-6 transform -translate-x-1/2 top-0",
