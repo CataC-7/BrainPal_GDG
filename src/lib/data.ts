@@ -68,3 +68,21 @@ export const protocols: Routine[] = [
     category: 'rerouting',
   },
 ];
+
+export const activityOptions = {
+    meditation: [
+        { value: 'breath_focus', label: 'Breath Focus' },
+        { value: 'body_scan', label: 'Body Scan' },
+        { value: 'loving_kindness', label: 'Loving-Kindness' },
+    ],
+    movement: [
+        { value: 'upper_body', label: 'Upper Body' },
+        { value: 'lower_body', label: 'Lower Body' },
+        { value: 'run', label: 'Run' },
+    ],
+    onlineLearning: [
+        { value: 'javascript', label: 'JavaScript' },
+        { value: 'agentic_ai', label: 'Agentic AI' },
+        { value: 'marketing', label: 'Marketing' },
+    ]
+}

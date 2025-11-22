@@ -7,6 +7,7 @@ import {
 import { dailyWorkflows, protocols } from '@/lib/data';
 import { ListChecks, Moon, Sunrise } from 'lucide-react';
 import { RoutineChecklist } from './routine-checklist';
+import { KeyValueActivityPairs } from './key-value-activity-pairs';
 
 export function RoutineAccessor() {
   const morningRoutines = dailyWorkflows.filter(
@@ -25,7 +26,7 @@ export function RoutineAccessor() {
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Daily Workflows Column */}
         <div className="space-y-4">
           <RoutineChecklist
@@ -47,6 +48,7 @@ export function RoutineAccessor() {
 
         {/* Protocols Column */}
         <div className="space-y-4">
+          <KeyValueActivityPairs />
           <Accordion type="single" collapsible className="w-full space-y-4">
             <AccordionItem
               value="emergency-protocol"
