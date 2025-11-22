@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/popover"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { activityOptions } from "@/lib/data"
+import { Input } from "./ui/input"
 
 interface ComboboxProps {
   options: { value: string; label: string }[];
@@ -114,9 +115,10 @@ function Combobox({ options, defaultLabel, activityKey, onActivityChange }: Comb
 
 interface KeyValueActivityPairsProps {
     onActivityChange: (activityKey: string, value: string) => void;
+    onNonNegotiablesChange: (value: string) => void;
 }
 
-export function KeyValueActivityPairs({ onActivityChange }: KeyValueActivityPairsProps) {
+export function KeyValueActivityPairs({ onActivityChange, onNonNegotiablesChange }: KeyValueActivityPairsProps) {
     return (
         <Card className="border bg-card rounded-md">
             <CardHeader className="px-4 pt-4 pb-2">
@@ -139,6 +141,14 @@ export function KeyValueActivityPairs({ onActivityChange }: KeyValueActivityPair
                     <div className="flex items-center justify-between">
                         <span>Mobility</span>
                         <Combobox options={activityOptions.mobility} defaultLabel="Select type..." activityKey="mobility" onActivityChange={onActivityChange} />
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <span>Three Non-Negotiables</span>
+                        <Input 
+                            className="w-[200px] h-9 bg-muted/50"
+                            placeholder="activity1, activity2, activity3"
+                            onChange={(e) => onNonNegotiablesChange(e.target.value)}
+                        />
                     </div>
                 </div>
             </CardContent>

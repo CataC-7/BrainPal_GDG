@@ -52,6 +52,25 @@ export function RoutineAccessor() {
     });
   };
 
+  const handleNonNegotiablesChange = (value: string) => {
+    const tasks = value.split(',').map(task => task.trim()).filter(task => task);
+    const newSteps: Step[] = tasks.slice(0, 3).map(task => ({ text: task, completed: false }));
+
+    setDailyWorkflows(prevWorkflows => {
+      return prevWorkflows.map(workflow => {
+        if (workflow.id === 'dwf-flow') {
+          if (newSteps.length > 0) {
+            return { ...workflow, steps: newSteps };
+          }
+          // If input is empty, revert to default
+          const defaultFlow = initialDailyWorkflows.find(w => w.id === 'dwf-flow');
+          return defaultFlow ? { ...defaultFlow } : workflow;
+        }
+        return workflow;
+      });
+    });
+  };
+
   const handleStepsUpdate = (routineId: string, newSteps: Step[]) => {
     setDailyWorkflows(prevWorkflows => {
       return prevWorkflows.map(workflow => {
@@ -90,7 +109,7 @@ export function RoutineAccessor() {
 
         {/* Protocols Column */}
         <div className="space-y-4">
-          <KeyValueActivityPairs onActivityChange={handleActivityChange} />
+          <KeyValueActivityPairs onActivityChange={handleActivityChange} onNonNegotiablesChange={handleNonNegotiablesChange} />
           <Accordion type="single" collapsible className="w-full space-y-4">
             <AccordionItem
               value="emergency-protocol"
