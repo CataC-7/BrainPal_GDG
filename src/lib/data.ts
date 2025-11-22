@@ -15,7 +15,12 @@ export const dailyWorkflows: Routine[] = [
   {
     id: 'dwf-morning',
     title: 'Morning Routine',
-    steps: ['This is your morning routine. Edit it to make it your own.'],
+    steps: [
+      'Breakfast',
+      'Meditation',
+      'Movement',
+      'Online Learning',
+    ],
     category: 'morning',
   },
   {
@@ -27,7 +32,13 @@ export const dailyWorkflows: Routine[] = [
   {
     id: 'dwf-night',
     title: 'Night Routine',
-    steps: ['This is your night routine. Edit it to make it your own.'],
+    steps: [
+      'Friend Replies',
+      'Physio',
+      'Journal',
+      'Stretch',
+      'Go to Sleep',
+    ],
     category: 'night',
   },
 ];
