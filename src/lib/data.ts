@@ -31,7 +31,7 @@ export const dailyWorkflows: Routine[] = [
   {
     id: 'dwf-flow',
     title: "Today's Flow",
-    steps: [{ text: "This is your day's flow. Edit it to make it your own.", completed: false }],
+    steps: [],
     category: 'flow',
   },
   {
