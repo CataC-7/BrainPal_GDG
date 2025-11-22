@@ -3,6 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Tabs,
@@ -16,6 +23,7 @@ import { useState } from "react";
 
 export function RoutineCreator() {
   const [dailyTitle, setDailyTitle] = useState("");
+  const [dailyCategory, setDailyCategory] = useState("");
   const [dailySteps, setDailySteps] = useState("");
   const [protocolTitle, setProtocolTitle] = useState("");
   const [protocolSteps, setProtocolSteps] = useState("");
@@ -25,11 +33,12 @@ export function RoutineCreator() {
 
   const handleSave = (type: "daily" | "protocol") => {
     if (type === "daily") {
-      if (!dailyTitle || !dailySteps) return;
+      if (!dailyTitle || !dailySteps || !dailyCategory) return;
       setIsDailySaved(true);
       setTimeout(() => {
         setIsDailySaved(false);
         setDailyTitle("");
+        setDailyCategory("");
         setDailySteps("");
       }, 2000);
     } else {
@@ -68,6 +77,23 @@ export function RoutineCreator() {
             />
           </div>
           <div className="space-y-2">
+            <Label htmlFor="daily-category">Category</Label>
+            <Select
+              value={dailyCategory}
+              onValueChange={setDailyCategory}
+              disabled={isDailySaved}
+            >
+              <SelectTrigger id="daily-category">
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="morning">Morning Routine</SelectItem>
+                <SelectItem value="flow">Today's Flow</SelectItem>
+                <SelectItem value="night">Night Routine</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
             <Label htmlFor="daily-steps">Steps</Label>
             <Textarea
               id="daily-steps"
@@ -84,7 +110,9 @@ export function RoutineCreator() {
               isDailySaved && "bg-accent hover:bg-accent text-accent-foreground"
             )}
             onClick={() => handleSave("daily")}
-            disabled={isDailySaved || (!dailyTitle || !dailySteps)}
+            disabled={
+              isDailySaved || (!dailyTitle || !dailySteps || !dailyCategory)
+            }
           >
             {isDailySaved ? (
               <span className="flex items-center">
