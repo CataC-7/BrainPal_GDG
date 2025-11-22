@@ -52,26 +52,35 @@ export function RoutineAccessor() {
   const handleNonNegotiablesChange = (value: string) => {
     const tasks = value.split(',').map(task => task.trim()).filter(task => task);
 
-    if (tasks.length > 3) {
-      toast({
-        title: "Input Error",
-        description: "Maximum number of items has been inputted",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const newSteps: Step[] = tasks.map(task => ({ text: `*${task}*`, completed: false }));
-
     setDailyWorkflows(prevWorkflows => {
+      const flowWorkflow = prevWorkflows.find(w => w.id === 'dwf-flow');
+      const otherTasks = flowWorkflow ? flowWorkflow.steps.filter(s => !s.text.startsWith('*')) : [];
+      
+      const nonNegotiableTasksCount = otherTasks.length + tasks.length;
+
+      if (tasks.length > 3) {
+        toast({
+          title: "Input Error",
+          description: "Maximum of 3 non-negotiables is allowed.",
+          variant: "destructive",
+        });
+        // Trim the tasks to the first 3 if more are entered.
+        tasks.length = 3;
+      }
+  
+      const newSteps: Step[] = tasks.map(task => ({ text: `*${task}*`, completed: false }));
+  
       return prevWorkflows.map(workflow => {
         if (workflow.id === 'dwf-flow') {
-          if (newSteps.length > 0) {
-            return { ...workflow, steps: newSteps };
+          const existingNonNegotiables = workflow.steps.filter(step => step.text.startsWith('*'));
+          const existingActivities = workflow.steps.filter(step => !step.text.startsWith('*'));
+          
+          if (value.trim() === '') {
+            // If input is empty, remove all non-negotiables
+             return { ...workflow, steps: existingActivities };
           }
-          // If input is empty, revert to default
-          const defaultFlow = initialDailyWorkflows.find(w => w.id === 'dwf-flow');
-          return defaultFlow ? { ...defaultFlow } : workflow;
+          
+          return { ...workflow, steps: [...existingActivities, ...newSteps] };
         }
         return workflow;
       });
