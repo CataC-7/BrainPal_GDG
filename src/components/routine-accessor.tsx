@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/accordion';
 import { dailyWorkflows as initialDailyWorkflows } from '@/lib/data';
 import type { Routine, Step } from '@/lib/data';
-import { ListChecks, Moon, Plus, Sunrise, Users, Bot, Plane } from 'lucide-react';
+import { ListChecks, Moon, Plus, Sunrise, Users, Bot, Plane, Settings, KeyRound, Wrench } from 'lucide-react';
 import { RoutineChecklist } from './routine-checklist';
 import { KeyValueActivityPairs } from './key-value-activity-pairs';
 import { useState } from 'react';
@@ -64,11 +64,14 @@ export function RoutineAccessor() {
     const newSteps: Step[] = tasks.map(task => ({ text: `*${task}*`, completed: false }));
   
     setDailyWorkflows(prevWorkflows => {
-      const flowRoutine = prevWorkflows.find(workflow => workflow.id === 'dwf-flow');
-      if (!flowRoutine) return prevWorkflows;
-  
+      const flowRoutineIndex = prevWorkflows.findIndex(workflow => workflow.id === 'dwf-flow');
+      if (flowRoutineIndex === -1) return prevWorkflows;
+
+      const newWorkflows = [...prevWorkflows];
+      const flowRoutine = newWorkflows[flowRoutineIndex];
+
       // Filter out only the old non-negotiables, keep the other tasks
-      const existingManualSteps = flowRoutine.steps.filter(step => !step.text.startsWith('*') || !step.text.endsWith('*'));
+      const existingManualSteps = flowRoutine.steps.filter(step => !step.text.startsWith('*'));
   
       let updatedSteps;
       if (value.trim() === '') {
@@ -76,13 +79,10 @@ export function RoutineAccessor() {
       } else {
         updatedSteps = [...existingManualSteps, ...newSteps];
       }
+
+      newWorkflows[flowRoutineIndex] = { ...flowRoutine, steps: updatedSteps };
       
-      return prevWorkflows.map(workflow => {
-        if (workflow.id === 'dwf-flow') {
-          return { ...workflow, steps: updatedSteps };
-        }
-        return workflow;
-      });
+      return newWorkflows;
     });
   };
 
@@ -167,6 +167,27 @@ export function RoutineAccessor() {
                     <div className="flex items-center gap-2 justify-start p-2 rounded-md hover:bg-muted/50 cursor-pointer">
                         <Plane className="w-4 h-4" />
                         <span>Travel Protocol</span>
+                    </div>
+                </div>
+            </CardContent>
+          </Card>
+          <Card className="border bg-card rounded-md">
+            <CardHeader className="px-4 pt-4 pb-2 flex-row items-center justify-between">
+              <CardTitle className="text-left font-semibold text-base">My Setup</CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-4">
+                <div className="space-y-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2 justify-start p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                        <Sunrise className="w-4 h-4" />
+                        <span>Modify Morning Routine</span>
+                    </div>
+                    <div className="flex items-center gap-2 justify-start p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                        <Moon className="w-4 h-4" />
+                        <span>Modify Night Routine</span>
+                    </div>
+                    <div className="flex items-center gap-2 justify-start p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                        <KeyRound className="w-4 h-4" />
+                        <span>Modify Key:Value Activity Pairs</span>
                     </div>
                 </div>
             </CardContent>
