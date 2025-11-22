@@ -155,16 +155,16 @@ export function RoutineAccessor() {
               </Button>
             </CardHeader>
             <CardContent className="px-4 pb-4">
-                <div className="space-y-2 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2 justify-start p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                <div className="text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
                         <Users className="w-4 h-4" />
                         <span>Family Visit Protocol</span>
                     </div>
-                    <div className="flex items-center gap-2 justify-start p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                    <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
                         <Bot className="w-4 h-4" />
                         <span>Choice Overwhelm Protocol</span>
                     </div>
-                    <div className="flex items-center gap-2 justify-start p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                    <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
                         <Plane className="w-4 h-4" />
                         <span>Travel Protocol</span>
                     </div>
@@ -176,16 +176,16 @@ export function RoutineAccessor() {
               <CardTitle className="text-left font-semibold text-base">My Setup</CardTitle>
             </CardHeader>
             <CardContent className="px-4 pb-4">
-                <div className="space-y-2 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2 justify-start p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                <div className="text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
                         <Sunrise className="w-4 h-4" />
                         <span>Modify Morning Routine</span>
                     </div>
-                    <div className="flex items-center gap-2 justify-start p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                    <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
                         <Moon className="w-4 h-4" />
                         <span>Modify Night Routine</span>
                     </div>
-                    <div className="flex items-center gap-2 justify-start p-2 rounded-md hover:bg-muted/50 cursor-pointer">
+                    <div className="flex items-center gap-2 justify-start px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer">
                         <KeyRound className="w-4 h-4" />
                         <span>Modify Key:Value Activity Pairs</span>
                     </div>
