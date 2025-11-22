@@ -33,6 +33,27 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   );
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const [lineHeight, setLineHeight] = useState(0);
+
+  useEffect(() => {
+    if (containerRef.current && allSteps.length > 1) {
+      const items = containerRef.current.children;
+      if (items.length > 1) {
+        const firstItem = items[0] as HTMLElement;
+        const lastItem = items[items.length - 1] as HTMLElement;
+        const firstCircle = firstItem.querySelector('button');
+        const lastCircle = lastItem.querySelector('button');
+        if (firstCircle && lastCircle) {
+            const height = lastCircle.offsetTop - firstCircle.offsetTop;
+            setLineHeight(height);
+        }
+      } else {
+        setLineHeight(0);
+      }
+    } else {
+        setLineHeight(0);
+    }
+  }, [allSteps, containerRef]);
   
   const handleStepToggle = (toggledStepText: string) => {
     const stepToToggle = allSteps.find(s => s.text === toggledStepText);
@@ -66,42 +87,50 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   if (allSteps.length === 0 && !canAddTasks) {
     return null;
   }
+  
+  const renderChecklistItem = (step: (Step & {routineId: string})) => (
+    <div className="flex items-center mb-4 last:mb-0 relative pl-10">
+      {isSortable && <GripVertical className="absolute left-0 text-muted-foreground/50" />}
+      <button
+        onClick={() => handleStepToggle(step.text)}
+        className={cn(
+          "flex items-center justify-center w-6 h-6 rounded-full border-2 transition-colors z-10",
+          "absolute left-6 transform -translate-x-1/2 top-0",
+          step.completed ? "bg-accent border-accent-foreground/50" : "border-border hover:border-primary bg-background"
+        )}
+      >
+        {step.completed ? (
+          <Check className="w-4 h-4 text-accent-foreground" />
+        ) : (
+          <Circle className="w-3 h-3 text-muted-foreground/50 fill-current" />
+        )}
+      </button>
+      <span
+        className={cn(
+          "text-muted-foreground transition-opacity",
+          step.completed && "opacity-50 line-through"
+        )}
+      >
+        {step.text.startsWith('*') && step.text.endsWith('*') ? (
+          <span className="italic">{step.text.slice(1, -1)}</span>
+        ) : (
+          step.text
+        )}
+      </span>
+    </div>
+  );
 
   const checklistContent = (
     <div ref={containerRef} className="relative">
+      {!isSortable && lineHeight > 0 && (
+         <div 
+            className="absolute left-6 transform -translate-x-1/2 w-0.5 bg-border top-[12px]"
+            style={{height: `${lineHeight}px`}}
+         ></div>
+      )}
       {allSteps.map((step) => (
          <SortableItem key={step.text} id={step.text} isSortable={isSortable}>
-            <div className="flex items-center mb-4 last:mb-0 relative pl-10">
-                {isSortable && <GripVertical className="absolute left-0 text-muted-foreground/50" />}
-                <button
-                    onClick={() => handleStepToggle(step.text)}
-                    className={cn(
-                    "flex items-center justify-center w-6 h-6 rounded-full border-2 transition-colors z-10",
-                    "absolute left-6 bg-background",
-                    step.completed
-                        ? "bg-accent border-accent-foreground/50"
-                        : "border-border hover:border-primary"
-                    )}
-                >
-                    {step.completed ? (
-                    <Check className="w-4 h-4 text-accent-foreground" />
-                    ) : (
-                    <Circle className="w-3 h-3 text-muted-foreground/50 fill-current" />
-                    )}
-                </button>
-                <span
-                    className={cn(
-                    "text-muted-foreground transition-opacity",
-                    step.completed && "opacity-50 line-through"
-                    )}
-                >
-                     {step.text.startsWith('*') && step.text.endsWith('*') ? (
-                        <span className="italic">{step.text.slice(1, -1)}</span>
-                    ) : (
-                        step.text
-                    )}
-                </span>
-            </div>
+            {renderChecklistItem(step)}
          </SortableItem>
       ))}
     </div>
@@ -128,7 +157,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
         ) : checklistContent}
         {canAddTasks && (
             <div className="flex items-center gap-2 mt-4 pl-10 relative">
-                 <PlusCircle className="w-6 h-6 absolute left-0 text-muted-foreground/50 top-1/2 -translate-y-1/2" />
+                 <PlusCircle className="w-6 h-6 absolute left-6 transform -translate-x-1/2 text-muted-foreground/50 top-1/2 -translate-y-1/2" />
                  <Input 
                     placeholder="Add new activity..."
                     value={newActivity}

@@ -17,15 +17,18 @@ export function SortableItem({ children, id, isSortable }: SortableItemProps) {
     setNodeRef,
     transform,
     transition,
+    isDragging,
   } = useSortable({id: id, disabled: !isSortable});
   
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition: transition || 'transform 0.25s ease',
+    zIndex: isDragging ? 1 : 0,
+    position: 'relative' as const,
   };
   
   if (!isSortable) {
-    return <div>{children}</div>;
+    return <>{children}</>;
   }
 
   return (
