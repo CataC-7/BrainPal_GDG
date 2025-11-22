@@ -12,9 +12,11 @@ import { ListChecks, Moon, Sunrise } from 'lucide-react';
 import { RoutineChecklist } from './routine-checklist';
 import { KeyValueActivityPairs } from './key-value-activity-pairs';
 import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 export function RoutineAccessor() {
   const [dailyWorkflows, setDailyWorkflows] = useState<Routine[]>(initialDailyWorkflows);
+  const { toast } = useToast();
 
   const morningRoutines = dailyWorkflows.filter(
     (r) => r.category === 'morning'
@@ -54,7 +56,17 @@ export function RoutineAccessor() {
 
   const handleNonNegotiablesChange = (value: string) => {
     const tasks = value.split(',').map(task => task.trim()).filter(task => task);
-    const newSteps: Step[] = tasks.slice(0, 3).map(task => ({ text: task, completed: false }));
+
+    if (tasks.length > 3) {
+      toast({
+        title: "Input Error",
+        description: "Maximum number of items has been inputted",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const newSteps: Step[] = tasks.map(task => ({ text: `*${task}*`, completed: false }));
 
     setDailyWorkflows(prevWorkflows => {
       return prevWorkflows.map(workflow => {

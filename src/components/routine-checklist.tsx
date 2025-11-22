@@ -13,6 +13,18 @@ interface RoutineChecklistProps {
   onStepsUpdate: (routineId: string, steps: Step[]) => void;
 }
 
+function formatStepText(text: string) {
+    if (text.startsWith('*') && text.endsWith('*')) {
+      return (
+        <span className="italic">
+          {text.substring(1, text.length - 1)}
+          <span className="font-sans not-italic"> *</span>
+        </span>
+      );
+    }
+    return text;
+  }
+
 export function RoutineChecklist({ title, icon, routines, onStepsUpdate }: RoutineChecklistProps) {
   const allSteps = useMemo(() => routines.flatMap(r => r.steps.map(s => ({...s, routineId: r.id}))), [routines]);
 
@@ -114,7 +126,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate }: Routi
                   step.completed && "opacity-50 line-through"
                 )}
               >
-                {step.text}
+                {formatStepText(step.text)}
               </span>
             </div>
           ))}

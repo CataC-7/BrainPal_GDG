@@ -146,7 +146,7 @@ export function KeyValueActivityPairs({ onActivityChange, onNonNegotiablesChange
                         <span>Three Non-Negotiables</span>
                         <Input 
                             className="w-[200px] h-9 bg-muted/50"
-                            placeholder="activity1, activity2, activity3"
+                            placeholder="Type in a maximum of 3 tasks separated by a comma"
                             onChange={(e) => onNonNegotiablesChange(e.target.value)}
                         />
                     </div>
