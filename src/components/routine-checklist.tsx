@@ -91,7 +91,7 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   }
   
   const renderChecklistItem = (step: (Step & {routineId: string})) => (
-    <div className="flex items-center mb-2 last:mb-0 relative pl-12" data-checklist-item="true">
+    <div className="flex items-center relative pl-12" data-checklist-item="true">
       <button
         onClick={() => handleStepToggle(step.text)}
         className={cn(
@@ -123,14 +123,14 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
 
   const checklistContent = (
     <div ref={containerRef} className="relative">
-      {!isSortable && lineHeight > 0 && (
+      {!isSortable && lineHeight > 0 && allSteps.length > 1 && (
          <div 
             className="absolute left-6 transform -translate-x-1/2 w-0.5 bg-border top-[12px]"
             style={{height: `${lineHeight}px`}}
          ></div>
       )}
       {allSteps.map((step) => (
-         <SortableItem key={step.text} id={step.text} isSortable={isSortable}>
+         <SortableItem key={step.text} id={step.text} isSortable={isSortable} className="mb-2 last:mb-0">
             {renderChecklistItem(step)}
          </SortableItem>
       ))}

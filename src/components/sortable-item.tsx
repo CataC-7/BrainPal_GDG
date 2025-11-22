@@ -3,14 +3,16 @@
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { cn } from '@/lib/utils';
 
 interface SortableItemProps {
     children: React.ReactNode;
     id: string;
     isSortable: boolean;
+    className?: string;
 }
 
-export function SortableItem({ children, id, isSortable }: SortableItemProps) {
+export function SortableItem({ children, id, isSortable, className }: SortableItemProps) {
   const {
     attributes,
     listeners,
@@ -28,11 +30,11 @@ export function SortableItem({ children, id, isSortable }: SortableItemProps) {
   };
   
   if (!isSortable) {
-    return <>{children}</>;
+    return <div className={className}>{children}</div>;
   }
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className={className}>
       {children}
     </div>
   );
