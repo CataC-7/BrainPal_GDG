@@ -31,14 +31,15 @@ export function RoutineChecklist({ title, icon, routines }: RoutineChecklistProp
           if (firstCircle && lastCircle) {
              const firstRect = firstCircle.getBoundingClientRect();
              const lastRect = lastCircle.getBoundingClientRect();
-             const height = lastRect.top - firstRect.top;
+             const containerRect = containerRef.current.getBoundingClientRect();
+             const height = (lastRect.top - containerRect.top) - (firstRect.top - containerRect.top);
              setLineHeight(height);
           }
         } else {
           setLineHeight(0);
         }
       }
-    }, 0);
+    }, 50); // Increased timeout slightly for stability
   
     return () => clearTimeout(timer);
   }, [steps]);
@@ -69,7 +70,7 @@ export function RoutineChecklist({ title, icon, routines }: RoutineChecklistProp
       </CardHeader>
       <CardContent>
         <div ref={containerRef} className="relative">
-           {steps.length > 1 && (
+           {lineHeight > 0 && (
             <div
                 className="absolute left-[12px] w-px bg-border -translate-x-1/2"
                 style={{ 
@@ -84,10 +85,10 @@ export function RoutineChecklist({ title, icon, routines }: RoutineChecklistProp
                 onClick={() => handleStepToggle(index)}
                 className={cn(
                   "flex items-center justify-center w-6 h-6 rounded-full border-2 transition-colors z-10",
-                  "absolute left-[0px]",
+                  "absolute left-[0px] bg-background",
                   step.completed
                     ? "bg-accent border-accent-foreground/50"
-                    : "bg-background border-border hover:border-primary"
+                    : "border-border hover:border-primary"
                 )}
               >
                 {step.completed ? (
