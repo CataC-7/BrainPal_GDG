@@ -3,13 +3,14 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Check, Circle, GripVertical, PlusCircle } from 'lucide-react';
+import { Check, Circle, PlusCircle } from 'lucide-react';
 import type { Routine, Step } from '@/lib/data';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { SortableItem } from './sortable-item';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
+import { CardDescription } from './ui/card';
 
 interface RoutineChecklistProps {
   title: string;
@@ -92,7 +93,6 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
   
   const renderChecklistItem = (step: (Step & {routineId: string})) => (
     <div className="flex items-center mb-2 last:mb-0 relative pl-12" data-checklist-item="true">
-      {isSortable && <GripVertical className="absolute left-0 text-muted-foreground/50" />}
       <button
         onClick={() => handleStepToggle(step.text)}
         className={cn(
@@ -148,6 +148,11 @@ export function RoutineChecklist({ title, icon, routines, onStepsUpdate, isSorta
           {icon}
           {title}
         </CardTitle>
+        {isSortable && (
+          <CardDescription className="text-xs italic !mt-0">
+            Drag and drop to re-order
+          </CardDescription>
+        )}
       </CardHeader>
       <CardContent>
         {isSortable ? (

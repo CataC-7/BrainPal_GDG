@@ -118,18 +118,15 @@ export function RoutineAccessor() {
             routines={morningRoutines}
             onStepsUpdate={handleStepsUpdate}
           />
-          <div>
-            <RoutineChecklist
-                title="Today's Flow"
-                icon={<ListChecks className="text-primary" />}
-                routines={flowRoutines}
-                onStepsUpdate={handleStepsUpdate}
-                isSortable={true}
-                onDragEnd={(e) => handleDragEnd(e, 'dwf-flow')}
-                canAddTasks={true}
-            />
-            <p className="text-xs text-muted-foreground italic text-right pr-2 pt-1">Drag and drop to re-order</p>
-          </div>
+          <RoutineChecklist
+              title="Today's Flow"
+              icon={<ListChecks className="text-primary" />}
+              routines={flowRoutines}
+              onStepsUpdate={handleStepsUpdate}
+              isSortable={true}
+              onDragEnd={(e) => handleDragEnd(e, 'dwf-flow')}
+              canAddTasks={true}
+          />
           <RoutineChecklist
             title="Night Routine"
             icon={<Moon className="text-primary" />}
