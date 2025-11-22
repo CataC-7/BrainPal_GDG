@@ -14,7 +14,7 @@ export default function Home() {
           <p className="text-muted-foreground mt-2 text-lg">
             Support yourself when it matters the most
           </p>
-          <div className="mt-6 flex justify-center gap-4">
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
             <Button variant="destructive">
               <AlertTriangle />
               Emergency Protocol
